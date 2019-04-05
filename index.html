@@ -2,18 +2,22 @@
 <html>
     <head>
         <title>Breakdown of Indices</title>
+        <script src="plotly.min.js"></script>
     </head>
     <body>
-        <form action="/action_page.php">
+        <form>
             ULB Name:<br>
-            <input type="text" name="ulb-name"><br>
+            <input type="text" name="ulb-name" id="ulb"><br>
             ULB Population :<br>
-            <input type="text" name="ulb-pop"><br><br>
-            <input type="submit" value="Submit">
+            <input type="text" name="ulb-pop" id="pop"><br><br>
+            <input type="button" value="Submit" onclick="load()">
         </form>
         <div id="indices"></div>
         <div id="services"></div>   
         <div id="depart"></div>
         <div id = "func"></div>
     </body>
+    <script src="form.js"></script>
+    <script src="init.js"></script>
+    <script src="indices.js"></script>
 </html>

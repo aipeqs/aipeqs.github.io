@@ -118,17 +118,17 @@ let funcs = {
     "pgr": Object.keys(PGR_functionaries)
 };
 
-slas = {
+let slas = {
     "water": 37,
     "pgr" : 45,
     "property" : 50
 };
 
-servs = {
+let servs = {
     "water" : "Water Charges",
     "pgr" : "Public Grievance Report",
     "property" : "Property Tax"
-}
+};
 
 tiers = {
     1 : {
@@ -270,19 +270,19 @@ class ULB {
         this.services = [];
         for (let key in data) {
             //create the services in the tier
-            this.services.push(Service(key, data[key]));
+            this.services.push(new Service(key, data[key]));
         }
-        calc_average();
+        this.calc_average();
 
     }
     
     calc_average() {
-        time = 0;
-        acc = 0;
-        use = 0;
-        coll = 0;
-        disc = 0;
-        for (let f in this.services) {
+        let time = 0;
+        let acc = 0;
+        let use = 0;
+        let coll = 0;
+        let disc = 0;
+        for (let f of this.services) {
             time += f.time;
             acc += f.acc;
             use += f.use;
@@ -295,21 +295,47 @@ class ULB {
         this.use = use / total;
         this.coll = coll / total;
         this.disc = disc / total;
+        this.gei = this.time * this.acc;
+        this.ipi = this.use * this.coll * this.disc;
     }
 
 
 }
 
-class Tier extends ULB {
+class Tier {
     //made up of services, all of which are the same for each tier
     constructor(no) {
-        this.name = "Tier" + toString(no);
+        this.name = "Tier " + no.toString();
         this.services = [];
         for (let key in tiers[no]) {
             //create the services in the tier
-            this.services.push(Service(key, tiers[no][key]));
+            console.log(key, tiers[no][key]);
+            this.services.push(new Service(key, tiers[no][key]));
         }
-        calc_average();
+        this.calc_average();
+    }
+
+    calc_average() {
+        let time = 0;
+        let acc = 0;
+        let use = 0;
+        let coll = 0;
+        let disc = 0;
+        for (let f of this.services) {
+            time += f.time;
+            acc += f.acc;
+            use += f.use;
+            coll += f.coll;
+            disc += f.disc;
+        }
+        let total = this.services.length;
+        this.time = time / total;
+        this.acc = acc / total;
+        this.use = use / total;
+        this.coll = coll / total;
+        this.disc = disc / total;
+        this.gei = this.time * this.acc;
+        this.ipi = this.use * this.coll * this.disc;
     }
 }
 
@@ -347,34 +373,36 @@ class Func {
 
 class Service {
     constructor(name, funcs) {
-        this.title = servs.name;
-        this.sla = slas.name;
+        this.title = servs[name];
+        this.sla = slas[name];
         if (name !== "pgr") {
             this.departments = null;
             this.funcs = [];
             for (let key in funcs) {
-                this.funcs.push(Func(key, funcs[key]));
+                this.funcs.push(new Func(key, funcs[key]));
             }
         } else {
             //set up the departments
             this.departments = [];
             for (let key in funcs) {
-                this.departments.push(Department(key, funcs[key]));
+                this.departments.push(new Department(key, funcs[key]));
             }
             //after creating all the departments, average the values over all the functionaries in each department
         }
-        calc_average();
+        this.calc_average();
     }
 
 
     calc_average() {
-        time = 0;
-        acc = 0;
-        use = 0;
-        coll = 0;
-        disc = 0;
+        let time = 0;
+        let acc = 0;
+        let use = 0;
+        let coll = 0;
+        let disc = 0;
+        let total = 0;
         if (this.departments === null) {
-            for (let f in this.funcs) {
+            total = this.funcs.length;
+            for (let f of this.funcs) {
                 time += f.time;
                 acc += f.acc;
                 use += f.use;
@@ -382,7 +410,8 @@ class Service {
                 disc += f.disc;
             }
         } else {
-            for (let f in this.departments) {
+            total = this.departments.length;
+            for (let f of this.departments) {
                 time += f.time;
                 acc += f.acc;
                 use += f.use;
@@ -390,13 +419,16 @@ class Service {
                 disc += f.disc;
             }
         }
+
+        console.log(time);
        
-        let total = this.funcs.length;
         this.time = time / total;
         this.acc = acc / total;
         this.use = use / total;
         this.coll = coll / total;
         this.disc = disc / total;
+        this.gei = this.time * this.acc;
+        this.ipi = this.use * this.coll * this.disc;
     }
 
     change_time(new_value) {
@@ -491,10 +523,9 @@ class Department {
         this.funcs = [];
         this.names = Object.keys(funcs); //gets the title of all the functionaries in this department
         for (let key in funcs) {
-            this.funcs.push(Func(key, funcs[key]));
+            this.funcs.push(new Func(key, funcs[key]));
         }
-        calc_average();
-
+        this.calc_average();
     }
 
     change_time(new_value) {
@@ -538,12 +569,12 @@ class Department {
     }
 
     calc_average() {
-        time = 0;
-        acc = 0;
-        use = 0;
-        coll = 0;
-        disc = 0;
-        for (let f in this.funcs) {
+        let time = 0;
+        let acc = 0;
+        let use = 0;
+        let coll = 0;
+        let disc = 0;
+        for (let f of this.funcs) {
             time += f.time;
             acc += f.acc;
             use += f.use;
@@ -562,8 +593,9 @@ class Department {
 
 
 function generate (name, population) {
-    const tier = find_tier(population);
-    averages = new Tier(tier); //for comparisons
+    let tier = find_tier(population);
+    console.log(tier);
+    let averages = new Tier(tier); //for comparisons
     //now to generate the random data points for the ULB to be simulated
     let ulb_data = {
         "water": {
@@ -608,5 +640,8 @@ function generate (name, population) {
             "Asst, Zonal Comm": Array.from({ length: 5 }, () => Math.random())
         }
     };
-    current = new ULB(name, ulb_data);
+    let current = new ULB(name, ulb_data);
+    console.log(averages);
+    console.log(current);
+    return [averages, current];
 }
