@@ -8,16 +8,26 @@
         <form>
             ULB Name:<br>
             <input type="text" name="ulb-name" id="ulb"><br>
-            ULB Population :<br>
-            <input type="text" name="ulb-pop" id="pop"><br><br>
+            ULB Grade :<br>
+            <select name="cars" id="grade">
+                <option value="I">I</option>
+                <option value="II">II</option>
+                <option value="III">III</option>
+                <option value="Special">Special</option>
+                <option value="Corporation">Corporation</option>
+                <option value="NP">NP</option>
+                <option value = "Selection">Selection</option>
+            </select>
             <input type="button" value="Submit" onclick="load()">
         </form>
         <div id="indices"></div>
-        <div id="services"></div>   
-        <div id="depart"></div>
-        <div id = "func"></div>
+        <div class="btn-group" id="index-zoom" style="display: none">
+            <button type="button" class="btn btn-primary" onclick="zoom1('gei')">GEI</button>
+            <button type="button" class="btn btn-primary" onclick = "zoom1('ipi')">IPI</button>
+        </div>
     </body>
     <script src="form.js"></script>
     <script src="init.js"></script>
     <script src="indices.js"></script>
+    <script src="zoom.js"></script>
 </html>

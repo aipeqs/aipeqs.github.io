@@ -1,0 +1,132 @@
+let PGR_functionaries = {
+    "Citizen": [0.667, 0.4, 0.62, 0.63, 0.5],
+    "Help Desk Officer": [0.456, 0.89, 0.64, 0.554, 0.5],
+    "GO": [0.789, 0.8, 0.76, 0.8, 0.5],
+    "ULB Official": [0.97, 0.5, 0.85, 0.73, 0.5]
+};
+
+let water_functionaries = {
+    "CSC/Online": [0.56, 0.70],
+    "Junior/Senior Asst": [0.57, 0.71],
+    "Assistant Engineer": [0.58, 0.74],
+    "Deputy Exe Eng": [0.63, 0.78],
+    "Commissioner": [0.514, 0.72]
+}; 
+
+let prop_functionaries = {
+    "CSC": [],
+    "Junior/Senior Asst": [],
+    "Bill Collector": [],
+    "Revenue Inspector": [],
+    "Revenue Officer": [],
+    "Asst, Zonal Comm": []
+};
+
+
+
+let funcs = {
+    "water": Object.keys(water_functionaries),
+    "property": Object.keys(prop_functionaries),
+    "pgr": Object.keys(PGR_functionaries)
+};
+
+let slas = {
+    "water": 37,
+    "pgr" : 45,
+    "property" : 50
+};
+
+function find_tier(size) {
+    if (size < 500000) {
+        return 1;
+    } else if (size < 1000000) {
+        return 2;
+    } else {
+        return 3;
+    }
+}
+
+
+//complete later when getting more specific
+
+let PGR_fields = {
+    0: "Name",
+    1: "Mobile Number",
+    2: "Email",
+    3: "Address",
+    4: "Select from top grievance",
+    5: "Grievance Type",
+    6: "Grievance Details",
+    7: "Grievance Location",
+    8: "Landmark"
+};
+
+
+
+let prop_fields = {
+    0 : "Category of Ownership",
+    1 : "Name",
+    2 : "Property Type",
+    3 : "Owner Name",
+    4 : "Property Address",
+    5 : "Usage",
+    6 : "Classification",
+    7 : "Zone",
+    8 : "Age",
+    9 : "Occupancy Type",
+    10 : "Floor Details",
+    11 : "Vacant Land Details",
+    12 : "Document Enclosed Details",
+    13 : "Mobile No",
+    14 : "Amenities",
+    15 : "Construction Type",
+    16 : "Details of Surrounding",
+    17 : "Boundaries of the Property",
+    18 : "Guardian",
+    19 : "Guardian Relation",
+    20 : "Owner Gender"
+};
+
+
+let water_fields = {
+    1 : "PT Assessment No",
+    2 : "Name of Applicant",
+    3 : "Address",
+    4 : "Connection Type",
+    5 : "Water Source Type",
+    6 : "Property Type",
+    7 : "Category",
+    8 : "Usage Type",
+    9 : "HSC Pipe Size",
+    10 : "Property Tax",
+    11 : "White Ration Card",
+    12 : "Locality",
+    13 : "Zone/Ward/Block",
+    14 : "Pump Capacity",
+    15 : "P Tax Receipt",
+    16 : "Distribution Line",
+    17 : "Email",
+    18 : "No of Persons",
+    19 : "No of Floors",
+    20 : "20Rs Court Fee Stamp"
+
+};
+
+//the fields needed for each of the services
+let tasks = {
+    "PGR": [0, 1, 4, 5, 6, 7, 8],
+    "Property Tax": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "Water Charges": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+};
+
+//dictionary representation of the avergages
+//lists in order of timeliness, accuracy for services and tasks
+//dummy values
+
+
+
+let servs = {
+    "water" : "Water Charges",
+    "pgr" : "Public Grievance Report",
+    "property" : "Property Tax"
+};
