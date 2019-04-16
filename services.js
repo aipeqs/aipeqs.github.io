@@ -1,5 +1,6 @@
 // the graphing and interaction with the services
-ids = ['pgr', 'ptax', 'wtax']
+let ids = ['pgr', 'ptax', 'wtax'];
+
 function draw(ctx, title, labels, d1, d2) {
   let myChart = new Chart(ctx, {
       type: 'bar',
@@ -52,18 +53,26 @@ function draw(ctx, title, labels, d1, d2) {
   });
 }
 
-function create () {
+
+function create() {
+  // the graph and the form will be in the flexbox
   let cont = document.getElementById('service-flex');
-  if (cont !== null) {
-    cont.remove();
+  if (cont === null) {
+    cont = document.createElement('div');
+    // creating the container
+    cont.className = 'flex-container';
+    cont.setAttribute('id', 'service-flex');
   }
-  cont = document.createElement('div');
-  cont.className = 'flex-container';
-  cont.setAttribute('id', 'service-flex');
-  let h = document.createElement('canvas');
+  let h = document.getElementById('service-comp');
+  if (h !== null) {
+    h.remove();
+  }
+  h = document.createElement('canvas');
+  // the canvas for the graph
   h.setAttribute('id', 'service-comp');
-  cont.appendChild(h);
-  document.body.appendChild(cont);
+  cont.insertBefore(h, cont.firstChild);
+  let serv = document.getElementById('services');
+  serv.insertBefore(cont, serv.firstChild);
   return h;
 }
 
@@ -98,6 +107,37 @@ function add_form(labels, values, functions) {
   document.getElementById('service-flex').appendChild(f);
 }
 
+function add_buttons(aspect) {
+  // creating the buttons that further zoom in
+  // aspect is time, acc, use or coll
+  // the buttons will go in the div and not the flexbox
+  window.aspect = aspect;
+  console.log("Adding buttons");
+  let buttons = [];
+  let functions = [];
+  let r = document.getElementById('serv-select');
+  console.log(r);
+  if (r === null) {
+    console.log("Creating");
+    r = document.createElement('div');
+    r.className = 'btn-group';
+    r.setAttribute('id', 'serv-select');
+    r.style.display = "block";
+    document.getElementById('services').appendChild(r);
+    buttons = ["PGR", "Property Tax", "Water Tax"];
+    functions = [pgr_deep, prop_deep, water_deep];
+
+    for (let i = 0; i < buttons.length; i++)
+    {
+        let g = document.createElement('button');
+        g.className = "btn btn-primary";
+        g.innerHTML = buttons[i];
+        g.addEventListener('click', functions[i]);
+        r.appendChild(g);
+    }
+  }
+}
+
 function time () {
   let ctx = create();
   let title_text = 'Timeliness of Services';
@@ -119,6 +159,7 @@ function time () {
   functions = [time_pgr, time_ptax, time_wtax];
   form_values = dataset1.values;
   add_form(form_labels, form_values, functions);
+  add_buttons('time');
 }
 
 function acc() {
@@ -143,6 +184,7 @@ function acc() {
   form_values = dataset1.values;
   console.log(form_values);
   add_form(form_labels, form_values, functions);
+  add_buttons('acc');
 }
 
 function use() {
@@ -166,6 +208,7 @@ function use() {
   functions = [use_pgr, use_ptax, use_wtax];
   form_values = dataset1.values;
   add_form(form_labels, form_values, functions);
+  document.getElementById('serv-select').remove();
 }
 
 function coll() {
@@ -189,4 +232,5 @@ function coll() {
   functions = [coll_pgr, coll_ptax, coll_wtax];
   form_values = dataset1.values;
   add_form(form_labels, form_values, functions);
+  add_buttons('coll');
 }

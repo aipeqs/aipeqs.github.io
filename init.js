@@ -149,7 +149,7 @@ class Service {
         this.coll = ipi["Right Collection"];
         this.use = ipi["Right Use"];
         this.disc = ipi["Right Disclosure"];
-        if (name !== "pgr") {
+        if (name !== "PGR") {
             this.departments = null;
             this.funcs = [];
             for (let key in ipi.Functionaries) {
@@ -159,7 +159,8 @@ class Service {
             //set up the departments
             this.departments = [];
             for (let key in ipi.Departments) {
-                this.funcs.push(new Func(key, ipi.Departments[key], ipi.Functionaries, gei));
+                console.log(key);
+                this.departments.push(new Department(key, ipi.Departments[key], ipi.Functionaries, gei));
             }
             //after creating all the departments, average the values over all the functionaries in each department
         }
@@ -197,7 +198,7 @@ class Service {
     }
 
     change_time(new_value) {
-        difference = new_value - this.time;
+        let difference = new_value - this.time;
         this.time = new_value;
         if (this.departments === null) {
             for (let i = 0; i < this.funcs.length; i++) {
@@ -205,7 +206,8 @@ class Service {
             }
         } else {
             let change = null;
-            for (let d in this.departments) {
+            for (let d of this.departments) {
+                console.log(d);
                 change = d.time - difference;
                 d.change_time(change);
             }
@@ -214,7 +216,7 @@ class Service {
     }
 
     change_acc(new_value) {
-        difference = new_value - this.acc;
+        let difference = new_value - this.acc;
         this.acc = new_value;
         if (this.departments === null) {
             for (let i = 0; i < this.funcs.length; i++) {
@@ -222,7 +224,7 @@ class Service {
             }
         } else {
             let change = null;
-            for (let d in this.departments) {
+            for (let d of this.departments) {
                 change = d.acc - difference;
                 d.change_acc(change);
             }
@@ -231,12 +233,12 @@ class Service {
     }
 
     change_use(new_value) {
-        difference = new_value - this.use;
+        let difference = new_value - this.use;
         this.use = new_value;
     }
 
     change_coll(new_value) {
-        difference = new_value - this.coll;
+        let difference = new_value - this.coll;
         this.coll = new_value;
         if (this.departments === null) {
             for (let i = 0; i < this.funcs.length; i++) {
@@ -244,7 +246,7 @@ class Service {
             }
         } else {
             let change = null;
-            for (let d in this.departments) {
+            for (let d of this.departments) {
                 change = d.coll - difference;
                 d.change_coll(change);
             }
@@ -272,7 +274,7 @@ class Department {
     }
 
     change_time(new_value) {
-        difference = new_value - this.time;
+        let difference = new_value - this.time;
         this.time = new_value;
         for (let i = 0; i < this.funcs.length; i++) {
             this.funcs[i].time -= difference; //changes the overall averages accordingly
@@ -280,7 +282,7 @@ class Department {
     }
 
     change_acc(new_value) {
-        difference = new_value - this.acc;
+        let difference = new_value - this.acc;
         this.acc = new_value;
         for (let i = 0; i < this.funcs.length; i++) {
             this.funcs[i].acc -= difference; //changes the overall averages accordingly
@@ -289,7 +291,7 @@ class Department {
 
 
     change_coll(new_value) {
-        difference = new_value - this.coll;
+        let difference = new_value - this.coll;
         this.coll = new_value;
         for (let i = 0; i < this.funcs.length; i++) {
             this.funcs[i].coll -= difference; //changes the overall averages accordingly
