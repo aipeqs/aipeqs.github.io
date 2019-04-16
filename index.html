@@ -3,6 +3,10 @@
     <head>
         <title>Breakdown of Indices</title>
         <script src="plotly.min.js"></script>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="Chart/Chart.min.js"></script>
+        <link rel="stylesheet" href="main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <form>
@@ -20,7 +24,7 @@
             </select>
             <input type="button" value="Submit" onclick="load()">
         </form>
-        <div id="indices"></div>
+        <canvas id="indices"></canvas>
         <div class="btn-group" id="index-zoom" style="display: none">
             <button type="button" class="btn btn-primary" onclick="zoom1('gei')">GEI</button>
             <button type="button" class="btn btn-primary" onclick = "zoom1('ipi')">IPI</button>
@@ -30,4 +34,6 @@
     <script src="init.js"></script>
     <script src="indices.js"></script>
     <script src="zoom.js"></script>
+    <script src="services.js"></script>
+    <script src="updates.js"></script>
 </html>

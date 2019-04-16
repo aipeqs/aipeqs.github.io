@@ -1,64 +1,43 @@
 //creating the graphs for the IPIs and GEIs
 function graph_indices (average, city) {
-    //gathers the data and plots the GEI and the IPI
-    let trace1 = {
-        x: [average.gei],
-        y: [average.ipi],
-        mode: 'markers',
-        type: 'scatter',
-        name: average.name,
-        text: [average.name],
-        marker: { size: 12 }
-    };
-
-    let trace2 = {
-        x: [city.gei],
-        y: [city.ipi],
-        mode: 'markers',
-        type: 'scatter',
-        name: city.name,
-        text: [city.name],
-        marker: { size: 12 }
-    };
-
-    let data = [trace1, trace2];
-
-
-    let layout = {
-        title: {
-            text: 'IPI against GEI',
-            font: {
-                family: 'Courier New, monospace',
-                size: 24
-            },
-            xref: 'paper',
-            x: 0.05,
-        },
-        xaxis: {
-            title: {
-                text: 'GEI',
-                font: {
-                    family: 'Courier New, monospace',
-                    size: 9,
-                    color: '#7f7f7f'
-                }
-            },
-            range: [0, 1]
-        },
-        yaxis: {
-            title: {
-                text: 'IPI',
-                font: {
-                    family: 'Courier New, monospace',
-                    size: 9,
-                    color: '#7f7f7f'
-                }
-            },
-            range: [0, 1]
-        }
-    };
-
-
-    Plotly.newPlot('indices', data, layout);
+    let ctx = document.getElementById('indices');
+    let scatterChart = new Chart(ctx, {
+      type: 'scatter',
+      data: {
+          datasets: [{label: average.name ,data: [{x: average.gei, y: average.ipi}], backgroundColor: 'Blue'},
+                     {label: city.name, data: [{x: city.gei, y: city.ipi}], backgroundColor: 'Red'}]
+                   },
+      options: {
+          scales: {
+              xAxes: [{
+                  type: 'linear',
+                  position: 'bottom',
+                  ticks : {
+                    max: 1.0,
+                    min: 0.0
+                  },
+                  scaleLabel: {
+                    labelString: 'GEI',
+                    display: true
+                  }
+              }],
+              yAxes: [{
+                  ticks : {
+                    max: 1.0,
+                    min: 0.0
+                  },
+                  scaleLabel: {
+                    labelString: 'IPI',
+                    display: true
+                  }
+              }]
+          },
+          title : {
+            display: true,
+            text: 'IPI against GEI'
+          },
+          actions : ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove']
+      }
+  });
     document.getElementById('index-zoom').style.display = 'block';
 }
