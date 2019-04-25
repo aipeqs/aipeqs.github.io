@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome!</title>
+        <link rel="stylesheet" href="../static/css/front.css">
+        <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    </head>
+    <body>
+        <div class="center">
+            <form>
+                ULB Name:<br>
+                <input type="text" name="ulb-name" id="ulb"><br>
+                ULB Grade :<br>
+                <select name="cars" id="grade">
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="Special">Special</option>
+                    <option value="Corporation">Corporation</option>
+                    <option value="NP">NP</option>
+                    <option value="Selection">Selection</option>
+                </select>
+                <a class="button" href={{ url_for('simulation') }} onclick="load()">Start</a>
+            </form>
+        </div>
+    </body>
+</html>
