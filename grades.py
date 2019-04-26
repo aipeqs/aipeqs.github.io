@@ -1,6 +1,21 @@
 # read CSVs and calculate avgs
 import csv
 
+LAKH = 100000
+
+def determine_bin(pop):
+    '''Returns the population categories'''
+    if 0.25*LAKH <= pop <= 0.5*LAKH:
+        return 1
+    elif 0.5*LAKH < pop <= 0.75*LAKH:
+        return 2
+    elif 0.75*LAKH < pop <= LAKH:
+        return 3
+    elif LAKH < pop <= 2*LAKH:
+        return 4
+    else:
+        return 5
+
 grades = {
     "Corporation" : [0, 0, 0, 0],
     "Special": [0, 0, 0, 0],
@@ -31,10 +46,34 @@ sizes = {
     "Selection": 0
 }
 
+ulb_bins = {
+    1:[],
+    2:[],
+    3:[],
+    4:[],
+    5:[]
+}
+
+bin_sizes = {
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0
+}
+
+bins = {
+    1: [0,0,0,0],
+    2: [0,0,0,0],
+    3: [0,0,0,0],
+    4: [0,0,0,0],
+    5: [0,0,0,0]
+}
+
 code_grades = {}
 ulb_info = {}
 #order of array is [pgr timeliness, property tax time, water taw time, overall timeliness]
-# the automatic accuracies are all 0.5
+# the automatic accuracies are all 1
 def read():
     f = open("grades.csv")
     reader = csv.reader(f)
@@ -55,14 +94,12 @@ def read():
             sizes[ulb] += 1
             sizes[ulb] += 1
 
-def averages():
-    for key, value in grades.items():
-        grades[key] = [x/sizes[key] for x in value]
 
 def ulb_read():
     f = open("ulbs.csv")
     reader = csv.reader(f)
     for region, district, code, name, grade, population in reader:
+        code_grades[code] = grade
         ulb_info[code] = {
             "Region": region,
             "District": district,
@@ -70,6 +107,7 @@ def ulb_read():
             "Name": name,
             "Population" : float(population)
         }
+        ulb_bins[determine_bin(float(population))].append(code)
 
 gei_info = {}
 
@@ -95,6 +133,20 @@ def timeliness():
             "Accuracy": float(acc)
         }
 
+        # calculating the average timeliness across bins
+        found = ulb_info.get(code)
+        if found is not None:
+            b = determine_bin(found["Population"])
+            bins[b][0] += float(pgr_time)
+            bins[b][1] += float(ptax_time)
+            bins[b][2] += float(wtax_time)
+            bins[b][3] += float(time)
+            bin_sizes[b] += 1
+
+def averages():
+    for key, value in bins.items():
+        bins[key] = [x/bin_sizes[key] for x in value]
+
 pgr = {
     "Functionaries": {},
     "Departments": {}
@@ -117,7 +169,7 @@ def ipi_info():
         # services alone will have right disclosure
     pgr["Right Collection"] = float(use)
     pgr["Right Use"] = float(use)
-    pgr["Right Disclosure"] = 0.5
+    pgr["Right Disclosure"] = 1
 
     # property tax
     f = open("prop_coll.csv")
@@ -142,9 +194,9 @@ def ipi_info():
 
     
 if __name__ == "__main__":
-    read()
     ulb_read()
     timeliness()
-    print(ulb_info)
+    averages()
+    print(bins)
     print()
-    print(gei_info)
+    print(ulb_bins)

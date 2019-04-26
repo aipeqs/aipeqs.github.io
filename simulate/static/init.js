@@ -9,10 +9,30 @@ let gei_info = { '1001': { 'PGR': { 'Timeliness': 0.578437702, 'Accuracy': 0.5 }
 
 
 let services = {
-    "PGR": { 'Functionaries': { 'Citizen': 0.555555556, 'Help Desk Officer': 0.666666667, 'GO': 0.444444444, 'First Level Escalation': 0.666666667 }, 'Departments': { 'Engineering': 0.592592593, 'PHS': 0.592592593, 'Town Planning': 0.592592593, 'UPA': 0.592592593, 'Administration': 0.592592593, 'Revenue': 0.592592593 }, 'Right Collection': 0.592592593, 'Right Use': 0.592592593, 'Right Disclosure': 0.5 },
+    "PGR": { 'Functionaries': { 'Citizen': 0.555555556, 'Help Desk Officer': 0.666666667, 'GO': 0.444444444, 'First Level Escalation': 0.666666667 }, 'Departments': { 'Engineering': 0.592592593, 'PHS': 0.592592593, 'Town Planning': 0.592592593, 'UPA': 0.592592593, 'Administration': 0.592592593, 'Revenue': 0.592592593 }, 'Right Collection': 0.592592593, 'Right Use': 0.592592593, 'Right Disclosure': 1 },
     "Property Tax": { 'Functionaries': { 'MeeSeva/ CSC/Online': 0.530120482, 'Junior Asst./Senior Asst.': 0.506024096, 'Bill Collector': 0.53012048, 'Revenue Inspector': 0.53012482, 'Revenue Officer': 0.5301205, 'Asst Comm, Zonal Comm, Additional Comm, Deputy Comm, Commissioner': 0.542168675 }, 'Right Collection': 0.52811245, 'Right Disclosure': 0.5, 'Right Use': 0.52811245 },
     "Water Tax": { 'Functionaries': { 'MeeSeva/ CSC/Online': 0.4, 'Junior Asst./Senior Asst.': 0.36, 'Assistant Engineer ': 0.4, 'Deputy Exe Engg, Exe Engg, Supertndt Engg': 0.4, 'Commissioner': 0.4 }, 'Right Collection': 0.392, 'Right Disclosure': 0.5, 'Right Use': 0.392 }
 };
+
+const LAKH = 100000;
+
+function findbin(pop) {
+	if (0.25*LAKH <= pop <= 0.5*LAKH){
+        return 1
+	}
+    else if (0.5*LAKH < pop <= 0.75*LAKH) {
+        return 2
+    }
+    else if (0.75*LAKH < pop <= LAKH) {
+        return 3
+    }
+    else if (LAKH < pop <= 2*LAKH) {
+        return 4
+    }
+    else{
+        return 5
+    }
+}
 
 class ULB {
     //random generation of ULB to facilitate simulation
@@ -23,6 +43,7 @@ class ULB {
         this.district = data.District;
         this.grade = data.Grade;
         this.population = data.Population;
+        this.bin = findbin(this.population);
         this.time = gei_info.Timeliness;
         this.acc = gei_info.Accuracy;
         this.services = [];
@@ -75,18 +96,30 @@ let indices = {
     "Water Tax": 2
 };
 
+let bins = {1: [0.6581644103055556, 0.19514165166666667, 0.6161971922500001, 0.4898344180833334], 2: [0.6663472859411763, 0.19842400691176473, 0.5859213480588236, 0.48356421358823526], 3: [0.6471763774285714, 0.2226724242857143, 0.7323666677142857, 0.5340718231428571], 4: [0.6601050201875001, 0.22632661906249998, 0.652377637, 0.5129364253750001], 5: [0.6704651711764706, 0.18786100776470588, 0.5341360854117648, 0.4641540881764706]};
+
+let ulb_bins = {1: ['1155', '1156', '1157', '1158', '1120', '1124', '1164', '1165', '1161', '1162', '1160', '1151', '1152', '1153', '1148', '1147', '1150', '1149', '1062', '1065', '1140', '1139', '1072', '1146', '1144', '1145', '1076', '1078', '1142', '1082', '1083', '1133', '1134', '1137', '1092', '1135'], 2: ['1006', '1010', '1117', '1118', '1119', '1122', '1123', '1125', '1019', '1022', '1023', '1025', '1026', '1027', '1131', '1132', '1143', '1029', '1127', '1033', '1034', '1059', '1061', '1063', '1066', '1067', '1069', '1071', '1077', '1079', '1084', '1136', '1090', '1091'], 3: ['1005', '1011', '1121', '1018', '1030', '1032', '1081'], 4: ['1002', '1003', '1004', '1007', '1008', '1009', '1014', '1015', '1020', '1024', '1028', '1068', '1070', '1074', '1080', '1085'], 5: ['1001', '1154', '1012', '1013', '1016', '1017', '1163', '1021', '1031', '1035', '1060', '1064', '1138', '1073', '1075', '1086', '1093']};
+
+bin_strings = {
+	1: "0.25-0.5 Lakh",
+	2: "0.5-0.75 Lakh",
+	3: "0.75-1 Lakh",
+	4: "1-2 Lakh",
+	5: ">2 Lakh"
+}
+
 class Grade {
     //made up of services, all of which are the same for each tier
     constructor(name) {
-        this.name = name;
-        this.time = grades[name][3];
+        this.name = bin_strings[name];
+        this.time = bins[name][3];
         this.acc = 0.5;
         this.services = [];
         for (let key in services) {
             //create the services in the tier
             let gei = {
-                "Timeliness" : grades[name][indices[key]],
-                "Accuracy" : 0.5
+                "Timeliness" : bins[name][indices[key]],
+                "Accuracy" : 1
             };
 
             this.services.push(new Service(key, services[key], gei));
@@ -332,10 +365,11 @@ let ulb_grades = {
     'Selection': ['1002', '1074', '1080', '1093']
 };
 
-function generate (name, grade) {
-    let averages = new Grade(grade); //for comparisons
+function generate (name, pop) {
+	const bin = findbin(pop)
+    let averages = new Grade(bin); //for comparisons
     //now to generate the random data points for the ULB to be simulated
-    items = ulb_grades[grade];
+    items = ulb_bins[bin];
     var item = items[Math.floor(Math.random() * items.length)];
     let current = new ULB(item, ulbs[item], gei_info[item]);
     current.name = name;

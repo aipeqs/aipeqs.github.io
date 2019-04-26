@@ -1,5 +1,10 @@
 // first zoom that goes from the indices to the services and their specific factors that make up the indices
 function zoom1 (index) {
+    if (index === 'gei') {
+      geifactors();
+    } else {
+      ipifactors();
+    }
     let buttons = [];
     let functions = [];
     let r = document.getElementById('att-select');
@@ -11,7 +16,7 @@ function zoom1 (index) {
         r.className = 'btn-group';
         r.setAttribute('id', 'att-select');
         r.style.display = "block";
-        document.getElementById('index-scatter').appendChild(r);
+        document.getElementById('index-factors').appendChild(r);
     }
     console.log(index)
     if (index === 'gei') {

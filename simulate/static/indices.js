@@ -72,6 +72,8 @@ function butt() {
   document.getElementById('index-scatter').appendChild(h);
 }
 
+// here, you want to generate the graph before the buttons
+
 function gei_serv() {
   zoom1('gei');
   window.index = 'gei';

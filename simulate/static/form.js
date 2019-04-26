@@ -1,11 +1,10 @@
 
 function load() {
     let ulb = document.getElementById('ulb').value;
-    let e = document.getElementById('grade');
-    let grade = e.options[e.selectedIndex].value;
+    let pop = parseFloat(document.getElementById('pop').value);
     console.log(ulb);
-    console.log(grade);
-    let made = generate(ulb, grade);
+    console.log(pop);
+    let made = generate(ulb, pop);
     const average = made[0];
     console.log(average.name);
     let city = made[1];
