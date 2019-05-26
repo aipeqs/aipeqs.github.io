@@ -91,7 +91,7 @@ function create_depart() {
 
 function add_form_depart(labels, values, functions) {
   console.log(values);
-  // creating the forms to go alongside the graphs - the range input forms
+  // creating the forms to go alongside the graphs - the range input forms - the sliders are here
   let f = document.getElementById('depart-selector');
   if (f !== null) {
     f.remove()
@@ -106,9 +106,9 @@ function add_form_depart(labels, values, functions) {
     g.name = ids[i];
     g.min = "0.000000";
     g.max = "1.000000";
-    g.step = "0.000001";
+    g.step = "0.000001"; 
     g.setAttribute('value', "" + values[i].toFixed(6));
-    g.addEventListener("change", functions[i]);
+    g.addEventListener("change", functions[i]); //this function is to allow for the reflection of the change within the instance and the interface
     x.appendChild(g);
     let k = document.createElement('label');
     k.setAttribute('for', ids[i]);
@@ -171,7 +171,7 @@ function pgr_depart_time () {
   form_labels = ["Engineering Timeliness", "PHS Timeliness", "Town Planning Timeliness", "UPA Timeliness", "Administration Timeliness", "Revenue Timeliness"];
   functions = [time_eng, time_phs, time_tpl, time_upa, time_admin, time_rev];
   form_values = dataset1.values;
-  add_form_depart(form_labels, form_values, functions);
+  add_form_depart(form_labels, form_values, functions); //these functions are those found in updates.js
   add_buttons_depart('time');
 }
 

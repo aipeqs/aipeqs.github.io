@@ -76,7 +76,17 @@ function create() {
   return h;
 }
 
-function add_form(labels, values, functions) {
+function add_form(capt, labels, values, functions) {
+  //add the caption before the form
+  let caption = document.getElementById('caption3')
+    if (caption !== null) {
+      caption.remove()
+    }
+  caption = document.createElement('p');
+  caption.setAttribute('id', 'caption3');
+  caption.innerText = capt;
+
+
   console.log(values);
   // creating the forms to go alongside the graphs
   let f = document.getElementById('service-selector');
@@ -104,7 +114,9 @@ function add_form(labels, values, functions) {
     x.appendChild(k);
     f.appendChild(x);
   }
-  document.getElementById('service-flex').appendChild(f);
+  const flex = document.getElementById('service-flex');
+  flex.appendChild(caption);
+  flex.appendChild(f);
 }
 
 function add_buttons(aspect) {
@@ -141,6 +153,7 @@ function add_buttons(aspect) {
 function time () {
   let ctx = create();
   let title_text = 'Timeliness of Services';
+  let caption = "Figure showing comparison of " + title_text + " betwwen " + city.name + " and the average of ULBs with similar populations";
   let labels = [];
   let dataset1 = {}; //for the city
   let dataset2 = {}; //for the grade
@@ -158,13 +171,14 @@ function time () {
   form_labels = ["PGR Timeliness", "Property Tax Timeliness", "Water Tax Timeliness"];
   functions = [time_pgr, time_ptax, time_wtax];
   form_values = dataset1.values;
-  add_form(form_labels, form_values, functions);
+  add_form(caption, form_labels, form_values, functions);
   add_buttons('time');
 }
 
 function acc() {
   let ctx = create();
   let title_text = 'Accuracy of Services';
+  let caption = "Figure showing comparison of " + title_text + " betwwen " + city.name + " and the average of ULBs with similar populations"
   let labels = [];
   let dataset1 = {}; //for the city
   let dataset2 = {}; //for the grade
@@ -183,13 +197,14 @@ function acc() {
   functions = [acc_pgr, acc_ptax, acc_wtax];
   form_values = dataset1.values;
   console.log(form_values);
-  add_form(form_labels, form_values, functions);
+  add_form(caption, form_labels, form_values, functions);
   add_buttons('acc');
 }
 
 function use() {
   let ctx = create();
   let title_text = 'Right Use of Services';
+  let caption = "Figure showing comparison of " + title_text + " betwwen " + city.name + " and the average of ULBs with similar populations"
   let labels = [];
   let dataset1 = {}; //for the city
   let dataset2 = {}; //for the grade
@@ -207,13 +222,14 @@ function use() {
   form_labels = ["PGR Right Use", "Property Right Use", "Water Right Use"];
   functions = [use_pgr, use_ptax, use_wtax];
   form_values = dataset1.values;
-  add_form(form_labels, form_values, functions);
+  add_form(caption, form_labels, form_values, functions);
   document.getElementById('serv-select').remove();
 }
 
 function coll() {
   let ctx = create();
   let title_text = 'Right Collection of Services';
+  let caption = "Figure showing comparison of " + title_text + " betwwen " + city.name + " and the average of ULBs with similar populations"
   let labels = [];
   let dataset1 = {}; //for the city
   let dataset2 = {}; //for the grade
@@ -231,6 +247,6 @@ function coll() {
   form_labels = ["PGR Right Collection", "Property Tax Right Collection", "Water Tax Right Collection"];
   functions = [coll_pgr, coll_ptax, coll_wtax];
   form_values = dataset1.values;
-  add_form(form_labels, form_values, functions);
+  add_form(caption, form_labels, form_values, functions);
   add_buttons('coll');
 }

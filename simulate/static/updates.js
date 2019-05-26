@@ -1,13 +1,33 @@
 // carries out the updates in the class Structure and on the graphs
 //update the service attributes
 // PGR at index 0, Property tax at index 1, water tax at index 2
-function time_pgr() {
-  let new_time = parseFloat(document.getElementById('pgr').value);
-  city.services[0].change_time(new_time);
+
+function tax_updates(funct) {
   city.calc_average();
   console.log("Changed");
-  time();
-  graph_indices(average, city);
+  funct();
+  graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
+  let func = document.getElementById('functionaries');
+  if (func !== null) {
+    func.innerHTML = ' ';
+  }
+}
+
+function pgr_updates(funct) {
+  city.calc_average();
+  console.log("Changed");
+  funct();
+  graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
   let dpt = document.getElementById('departments');
   if (dpt !== null) {
     dpt.innerHTML = ' ';
@@ -16,75 +36,44 @@ function time_pgr() {
   if (func !== null) {
     func.innerHTML = ' ';
   }
+}
+
+function time_pgr() {
+  let new_time = parseFloat(document.getElementById('pgr').value);
+  city.services[0].change_time(new_time);
+  pgr_updates(time);
 }
 
 function time_ptax() {
   let new_time = parseFloat(document.getElementById('ptax').value);
   city.services[1].change_time(new_time);
-  city.calc_average();
-  console.log("Changed");
-  time();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(time);
 }
 
 function time_wtax() {
   let new_time = parseFloat(document.getElementById('wtax').value);
   city.services[2].change_time(new_time);
-  city.calc_average();
-  console.log("Changed");
-  time();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(time);
 }
+
 
 function acc_pgr() {
   let new_acc = parseFloat(document.getElementById('pgr').value);
   city.services[0].change_acc(new_acc);
-  city.calc_average();
-  console.log("Changed");
-  acc();
-  graph_indices(average, city);
-  let dpt = document.getElementById('departments');
-  if (dpt !== null) {
-    dpt.innerHTML = ' ';
-  }
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  pgr_updates(acc);
 }
 
 function acc_ptax() {
   let new_acc = parseFloat(document.getElementById('ptax').value);
   city.services[1].change_acc(new_acc);
   city.calc_average();
-  console.log("Changed");
-  acc();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(acc);
 }
 
 function acc_wtax() {
   let new_acc = parseFloat(document.getElementById('wtax').value);
   city.services[2].change_acc(new_acc);
-  city.calc_average();
-  console.log("Changed");
-  acc();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(acc);
 }
 
 function use_pgr() {
@@ -93,7 +82,7 @@ function use_pgr() {
   city.calc_average();
   console.log("Changed");
   use();
-  graph_indices(average, city);
+  graph_indices();
   let func = document.getElementById('functionaries');
   if (func !== null) {
     func.innerHTML = ' ';
@@ -103,323 +92,158 @@ function use_pgr() {
 function use_ptax() {
   let new_use = parseFloat(document.getElementById('ptax').value);
   city.services[1].change_use(new_use);
-  city.calc_average();
-  console.log("Changed");
-  use();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(use);
 }
 
 function use_wtax() {
   let new_use = parseFloat(document.getElementById('wtax').value);
   city.services[2].change_use(new_use);
-  city.calc_average();
-  console.log("Changed");
-  use();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(use);
 }
 
 function coll_pgr() {
   let new_coll = parseFloat(document.getElementById('pgr').value);
   city.services[0].change_coll(new_coll);
-  city.calc_average();
-  console.log("Changed");
-  coll();
-  graph_indices(average, city);
-  let dpt = document.getElementById('departments');
-  if (dpt !== null) {
-    dpt.innerHTML = ' ';
-  }
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  pgr_updates(coll);
 }
 
 function coll_ptax() {
   let new_coll = parseFloat(document.getElementById('ptax').value);
   city.services[1].change_coll(new_coll);
-  city.calc_average();
-  console.log("Changed");
-  coll();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(coll);
 }
 
 function coll_wtax() {
   let new_coll = parseFloat(document.getElementById('wtax').value);
   city.services[2].change_coll(new_coll);
-  city.calc_average();
-  console.log("Changed");
-  coll();
-  graph_indices(average, city);
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  tax_updates(coll);
 }
 
 // for the departments, the order is ['Engineering', 'PHS', 'Town Planning', 'UPA', 'Administration', 'Revenue']
 
-function time_eng() {
-  let new_time = parseFloat(document.getElementById('eng'));
-  city.services[0].departments[0].change_time(new_time);
+function func_updates(func1, func2) {
   city.services[0].calc_average();
   city.calc_average();
-  pgr_depart_time();
-  time();
+  func1();
+  func2();
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
   let func = document.getElementById('functionaries');
   if (func !== null) {
     func.innerHTML = ' ';
   }
 }
+
+function time_eng() {
+  let new_time = parseFloat(document.getElementById('eng').value);
+  city.services[0].departments[0].change_time(new_time);
+  func_updates(pgr_depart_time, time);
+}
+
 function time_phs() {
-  let new_time = parseFloat(document.getElementById('phs'));
+  let new_time = parseFloat(document.getElementById('phs').value);
   city.services[0].departments[1].change_time(new_time);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_time();
-  time();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_time, time);
 }
 
 function time_tpl() {
-  let new_time = parseFloat(document.getElementById('tpl'));
+  let new_time = parseFloat(document.getElementById('tpl').value);
   city.services[0].departments[2].change_time(new_time);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_time();
-  time();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_time, time);
 }
 
 function time_upa() {
-  let new_time = parseFloat(document.getElementById('upa'));
+  let new_time = parseFloat(document.getElementById('upa').value);
   city.services[0].departments[3].change_time(new_time);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_time();
-  time();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_time, time);
 }
 
 function time_admin() {
-  let new_time = parseFloat(document.getElementById('admin'));
+  let new_time = parseFloat(document.getElementById('admin').value);
   city.services[0].departments[4].change_time(new_time);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_time();
-  time();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_time, time);
 }
 
 function time_rev() {
-  let new_time = parseFloat(document.getElementById('rev'));
+  let new_time = parseFloat(document.getElementById('rev').value);
   city.services[0].departments[5].change_time(new_time);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_time();
-  time();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_time, time);
 }
 
 function acc_eng() {
-  let new_acc = parseFloat(document.getElementById('eng'));
+  let new_acc = parseFloat(document.getElementById('eng').value);
   city.services[0].departments[0].change_acc(new_acc);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_acc();
-  acc();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_acc, acc);
 }
 
 function acc_phs() {
-  let new_acc = parseFloat(document.getElementById('phs'));
+  let new_acc = parseFloat(document.getElementById('phs').value);
   city.services[0].departments[1].change_acc(new_acc);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_acc();
-  acc();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_acc, acc);
 }
 
 function acc_tpl() {
-  let new_acc = parseFloat(document.getElementById('tpl'));
+  let new_acc = parseFloat(document.getElementById('tpl').value);
   city.services[0].departments[2].change_acc(new_acc);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_acc();
-  acc();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_acc, acc);
 }
 
 function acc_upa() {
-  let new_acc = parseFloat(document.getElementById('upa'));
+  let new_acc = parseFloat(document.getElementById('upa').value);
   city.services[0].departments[3].change_acc(new_acc);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_acc();
-  acc();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_acc, acc);
 }
 
 function acc_admin() {
-  let new_acc = parseFloat(document.getElementById('admin'));
+  let new_acc = parseFloat(document.getElementById('admin').value); //extract value from form entry
   city.services[0].departments[4].change_acc(new_acc);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_acc();
-  acc();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_acc, acc);
 }
 
 function acc_rev() {
-  let new_acc = parseFloat(document.getElementById('rev'));
+  let new_acc = parseFloat(document.getElementById('rev').value);
   city.services[0].departments[5].change_acc(new_acc);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_acc();
-  acc();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_acc, acc);
 }
 
 function coll_eng() {
-  let new_coll = parseFloat(document.getElementById('eng'));
+  let new_coll = parseFloat(document.getElementById('eng').value);
   city.services[0].departments[0].change_acc(new_coll);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_coll();
-  coll();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_coll, coll);
 }
 
 function coll_phs() {
-  let new_coll = parseFloat(document.getElementById('phs'));
+  let new_coll = parseFloat(document.getElementById('phs').value);
   city.services[0].departments[1].change_acc(new_coll);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_coll();
-  coll();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_coll, coll);
 }
 
 function coll_tpl() {
-  let new_coll = parseFloat(document.getElementById('tpl'));
+  let new_coll = parseFloat(document.getElementById('tpl').value);
   city.services[0].departments[2].change_acc(new_coll);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_coll();
-  coll();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_coll, coll);
 }
 
 function coll_upa() {
-  let new_coll = parseFloat(document.getElementById('upa'));
+  let new_coll = parseFloat(document.getElementById('upa').value);
   city.services[0].departments[3].change_acc(new_coll);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_coll();
-  coll();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_coll, coll);
 }
 
 function coll_admin() {
-  let new_coll = parseFloat(document.getElementById('admin'));
+  let new_coll = parseFloat(document.getElementById('admin').value);
   city.services[0].departments[4].change_acc(new_coll);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_coll();
-  coll();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_coll, coll);
 }
 
 function coll_rev() {
-  let new_coll = parseFloat(document.getElementById('rev'));
+  let new_coll = parseFloat(document.getElementById('rev').value);
   city.services[0].departments[5].change_acc(new_coll);
-  city.services[0].calc_average();
-  city.calc_average();
-  pgr_depart_coll();
-  coll();
-  graph_indices();
-  let func = document.getElementById('functionaries');
-  if (func !== null) {
-    func.innerHTML = ' ';
-  }
+  func_updates(pgr_depart_coll, coll);
 }
 
 
@@ -436,6 +260,11 @@ function time_update(serv, id, index) {
   time();
   // redrawing the indices graph
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
 }
 function time_pmeeseva(){
   time_update(1, 'meeseva', 0);
@@ -457,7 +286,7 @@ function time_pcomm(){
 }
 
 function acc_update(serv, id, index) {
-  let new_acc = parseFloat(document.getElementById(id));
+  let new_acc = parseFloat(document.getElementById(id).value);
   city.services[serv].funcs[index].change_acc(new_acc);
   city.services[serv].calc_average();
   city.calc_average();
@@ -467,7 +296,13 @@ function acc_update(serv, id, index) {
   time();
   // redrawing the indices graph
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
 }
+
 function acc_pmeeseva(){
   acc_update(1, 'meeseva', 0);
 }
@@ -489,7 +324,7 @@ function acc_pcomm(){
 
 
 function coll_update(serv, id, index) {
-  let new_coll = parseFloat(document.getElementById(id));
+  let new_coll = parseFloat(document.getElementById(id).value);
   city.services[serv].funcs[index].change_coll(new_coll);
   city.services[serv].calc_average();
   city.calc_average();
@@ -499,6 +334,11 @@ function coll_update(serv, id, index) {
   time();
   // redrawing the indices graph
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
 }
 function coll_pmeeseva(){
   coll_update(1, 'meeseva', 0);
@@ -578,7 +418,7 @@ function coll_wcomms(){
 
 
 function dep_time_update(id, index) {
-  let new_time = parseFloat(document.getElementById(id));
+  let new_time = parseFloat(document.getElementById(id).value);
   city.services[0].departments[dindex].funcs[index].change_time(new_time);
   city.services[0].departments[dindex].calc_average();
   city.services[0].calc_average();
@@ -589,9 +429,14 @@ function dep_time_update(id, index) {
   time();
   // redrawing the indices graph
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
 }
 function dep_acc_update(id, index) {
-  let new_acc = parseFloat(document.getElementById(id));
+  let new_acc = parseFloat(document.getElementById(id).value);
   city.services[0].departments[dindex].funcs[index].change_acc(new_acc);
   city.services[0].departments[dindex].calc_average();
   city.services[0].calc_average();
@@ -602,9 +447,14 @@ function dep_acc_update(id, index) {
   time();
   // redrawing the indices graph
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
 }
 function dep_coll_update(id, index) {
-  let new_coll = parseFloat(document.getElementById(id));
+  let new_coll = parseFloat(document.getElementById(id).value);
   city.services[0].departments[dindex].funcs[index].change_coll(new_coll);
   city.services[0].departments[dindex].calc_average();
   city.services[0].calc_average();
@@ -615,6 +465,11 @@ function dep_coll_update(id, index) {
   time();
   // redrawing the indices graph
   graph_indices();
+  if (index == 'gei') {
+    geifactors();
+  } else {
+    ipifactors();
+  }
 }
 
 function time_cit(){

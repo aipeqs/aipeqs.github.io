@@ -16,7 +16,7 @@ function zoom1 (index) {
         r.className = 'btn-group';
         r.setAttribute('id', 'att-select');
         r.style.display = "block";
-        document.getElementById('index-factors').appendChild(r);
+        document.getElementById('index-scatter').appendChild(r);
     }
     console.log(index)
     if (index === 'gei') {

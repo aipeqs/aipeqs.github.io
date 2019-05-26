@@ -192,11 +192,36 @@ def ipi_info():
     wtax["Right Use"] = 0.392
 
 
+phs = {}
+upa = {}
+admin = {}
+engin = {}
+rev = {}
+town_planning = {}
+
+
+#function to read th different complaints within PGR departments
+#for each of the complaints, the objects will consist of the number of them on time and the total number
+
+def pgr_complaints():
+    f = open("townplanning.csv")
+    reader = csv.reader(f)
+    for ulb, dept, complaint, sla, actual, ontime in reader: 
+
+        if complaint not in town_planning:
+            town_planning[complaint] = {
+                'ontime' : 1 if ontime == 'true' else 0,
+                'total' : 1
+            }
+        else:
+            town_planning[complaint]['ontime'] += 1 if ontime == 'true' else 0
+            town_planning[complaint]['total'] += 1
+
     
 if __name__ == "__main__":
-    ulb_read()
-    timeliness()
-    averages()
-    print(bins)
-    print()
-    print(ulb_bins)
+    pgr_complaints()
+    final = {}
+    for key, value in town_planning.items():
+        final[key] = value['ontime']/value['total']
+    print(final)
+
