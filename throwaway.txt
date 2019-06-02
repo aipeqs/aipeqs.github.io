@@ -11,7 +11,7 @@ let water_functionaries = {
     "Assistant Engineer": [0.58, 0.74],
     "Deputy Exe Eng": [0.63, 0.78],
     "Commissioner": [0.514, 0.72]
-}; 
+};
 
 let prop_functionaries = {
     "CSC": [],
@@ -129,4 +129,44 @@ let servs = {
     "water" : "Water Charges",
     "pgr" : "Public Grievance Report",
     "property" : "Property Tax"
+};
+
+
+let comparisons = [];
+
+//the following are the timeliness of the separate complaints for PGR
+let phs = {'Provision of garbage bin': 0.497737556561086, 'Desilting of Drain': 0.46659122220035426, 'Stray Pigs': 0.4067887931034483, 'Bio Medical waste/Health hazard waste removal': 0.38170055452865065, 'Dog menace': 0.3688835630117835, 'Absenteesim of door to door garbage collector': 0.47543196544276456, 'Over flowing of garbage bins': 0.4191279887482419, 'Removal of garbage': 0.543658782083543, 'Mosquito menace': 0.6806242862580891, 'Absenteesim of sweepers': 0.5391621129326047, 'Unsanitary conditions on the road': 0.3793103448275862, 'Improper Sweeping': 0.5095923261390888, 'Complaints regarding public toilets': 0.4232558139534884, 'Issues relating to Vacant lands': 0.5788934426229508, 'Broken Bin': 0.6247288503253796, 'Stagnation of water': 0.4192655935613682, 'Removal of Debris': 0.6716566866267465, 'Spilling of Garbage from lorry': 0.32142857142857145, 'Disposal of removed silt on the Road': 0.5267471958584987, 'Unauthorised sale of meat and meat product': 0.32, 'Illegal draining of sewage to SWD/Open site': 0.44039735099337746, 'Complaints regarding restaurants / Function halls': 0.4140625, 'Food adulteration: Road Side Eateries': 0.415929203539823, 'Garbage lorry with out Net': 0.6296296296296297, 'Open defecation- free (ODF)': 0.3076923076923077, 'Fevers - Dengue/Malaria/ Gastro-enteritis': 0.5553435114503816, 'Shifting of garbage bin': 0.4148471615720524, 'Complaint Regarding School Toilets': 0.4166666666666667, 'Obstruction of road by Trees branches': 0.4502923976608187, 'Complaints regarding Dispensary': 0.4485294117647059, 'Complaints regarding burial ground': 0.35714285714285715, 'Death of Stray Animals': 0.26961483594864477, 'Burning of garbage': 0.507, 'Request for Anti Larval operations - to prevent  Dengue /Malaria etc': 0.6, 'Unhygeinic conditions because of Slaughter House': 0.5072463768115942, 'Poor maintenance of Public toilets at Fuel stations': 0.27906976744186046, 'Community Toilets': 0.30288461538461536, 'Removal of fallen trees': 0.47058823529411764, 'Complaints regarding function Halls': 0.2777777777777778, 'Stray cattle': 0.3548387096774194, 'Transfer Station Smell': 0.4189189189189189, 'Illegal slaughtering': 0.4444444444444444, 'Unauthorised tree Cutting': 0.47959183673469385, 'Silt by the side of dividers': 0.8783068783068783, 'Unclaimed Dead Bodies': 0.1111111111111111, 'Unhygienic and improper transport of meat and livestock': 0.2222222222222222, 'correction of Birth certificate': 0.0, 'Hanging of Streetlight Wires': 0.0, 'Non Burning of Street Lights': 0.0, 'Complaints regarding Schools': 0.0, 'Water pipe leakage': 0.0, 'Issues Related to Drinking Water Supply': 0.0, 'Unauthorised Road cutting': 0.0, 'Poor quality of work': 0.0};
+
+let upa = {'Non Receipt of Pensions (Disabled/ Old age/ Widow)': 0.5339805825242718, 'Disputes in SSG / SLF / TLF': 0.6451612903225806, 'Sanction of Gas Connection Under Deepam Scheme': 0.6363636363636364, 'Vaddi Leni Runalu': 0.23684210526315788, 'Non Sanction of Bank Linkage to the group': 0.5, 'Complaints regarding all Sanctioned loans': 0.618421052631579, 'Provision of Placement after Training under ESTP': 0.5333333333333333};
+
+
+let engineering = {'Repairs to existing footpath': 0.6825938566552902, 'Non Burning of Street Lights': 0.5010003637686431, 'Issues Related to Drinking Water Supply': 0.581074297188755, 'Water pipe leakage': 0.5257608435178529, 'Repairs to Flyovers/ bridges/ Culverts': 0.6535508637236085, 'Pot hole fill up/Repairs to the damage surface': 0.6800911854103343, 'Maintenance of Parks': 0.7385229540918163, 'Stoppage of Civil Works': 0.36036036036036034, 'Obstruction of water flow': 0.38642857142857145, 'Repair Bore wells': 0.5452240067624683, 'UGD Over Flow': 0.5858752056701684, 'Hanging of Streetlight Wires': 0.6633064516129032, 'Replacement of Cover for Manholes': 0.6451612903225806, 'Unauthorised Road cutting': 0.30242825607064017, 'Contamination of Water': 0.39901477832512317, 'Poor quality of work': 0.35520684736091296, 'Electric Shock due to street light': 0.4975124378109453, 'Repairs to the SWD': 0.670995670995671, 'Repairs to Centre Median': 0.6341463414634146, 'Repairs to Traffic Island': 0.625, 'Maintenance of Playground': 0.8431372549019608, 'Water Supply-Others': 0.6666666666666666, 'New Street light': 0.7183098591549296, 'Electrical shock due to street light': 0.5, 'POT HOLE FILL UP/REPAIRS TO DAMAGE SURFACE': 0.6666666666666666, 'tap repair': 0.7272727272727273, 'Desilting of Drain': 0.2765957446808511, 'Illegal draining of sewage to SWD/Open site': 0.6666666666666666, 'Obstruction of road by Trees branches': 0.3333333333333333, 'Stagnation of water': 0.6111111111111112, 'Complaints regarding Schools': 1.0, 'Complaints regarding public toilets': 0.875};
+
+let admin = {'Complaints regarding Voter list': 0.48484848484848486, 'Inclusion, delection of correction in the Voter list': 0.5503355704697986, 'Complaints regarding Schools': 0.3425414364640884, 'pay fixation promotion scale': 0.5, 'RTI act': 0.0};
+
+let rev = {'Complaints related to property tax': 0.7292351008916002, 'New Property Tax Fixation': 0.7341040462427746, 'Double Assessments': 0.6538461538461539, 'Errors in demand Notice': 0.7971014492753623, 'Revision Petition on Property Tax': 0.8818565400843882, 'Property Tax Bifurcation': 0.6428571428571429, 'Transfer of Title of property': 0.6232876712328768, 'Complaints related to issue of all types of license': 0.7167381974248928, 'New Vacant Land tax Fixation': 0.6666666666666666, 'Vacancy Remission': 0.8, 'Improper Sweeping': 0.8, 'solvency': 0.0, 'Demand Extract': 1.0, 'Issues relating to Vacant lands': 0.5, 'Desilting of Drain': 0.0, 'Non Burning of Street Lights': 0.0, 'Complaints regarding all Sanctioned loans': 1.0, 'Water pipe leakage': 0.0, 'Mosquito menace': 0.0, 'Stray Pigs': 0.0, 'Broken Bin': 0.0, 'Stagnation of water': 0.0, 'Hanging of Streetlight Wires': 0.0, 'Absenteesim of door to door garbage collector': 0.0, 'Issues Related to Drinking Water Supply': 0.0, 'Provision of Placement after Training under ESTP': 1.0};
+
+let town_planning = {'Unauthorised / Illegal construction': 0.6301575393848462, 'Encroachment on the public property': 0.3761804826862539, 'Removal of shops in the footpath': 0.4763092269326683, 'Issues relating to Advertisement Boards': 0.5285714285714286, 'Parking Issue': 0.2979942693409742, 'Violation of DCR/Building bye laws': 0.6387665198237885, 'Unauthorised Advt. Boards': 0.45, 'Misuse of Community Hall': 0.30434782608695654, 'Over head cable Wires running in Hapazard manner': 0.18421052631578946, 'property survey': 0.0, 'Removal of Debris': 0.0};
+
+
+
+let ulb_grades = {
+    'Corporation': ['1001', '1008', '1012', '1013', '1016', '1021', '1031', '1035', '1060', '1064', '1073', '1075', '1086'],
+    'Special': ['1004', '1014', '1015', '1017', '1028', '1068', '1070'],
+    'II': ['1005', '1006', '1011', '1019', '1022', '1023', '1025', '1026', '1027', '1132', '1029', '1030', '1033', '1034', '1061', '1062', '1063', '1065', '1066', '1067', '1069', '1071', '1078', '1090', '1092'],
+    'I': ['1003', '1007', '1009', '1018', '1020', '1024', '1032', '1059', '1077', '1079', '1081', '1085', '1091'],
+    'III': ['1156', '1158', '1010', '1117', '1118', '1119', '1121', '1122', '1123', '1164', '1161', '1131', '1143', '1127', '1151', '1152', '1072', '1076', '1082', '1083', '1084', '1136', '1137'],
+    'NP': ['1154', '1155', '1157', '1120', '1124', '1165', '1125', '1162', '1163', '1160', '1153', '1148', '1147', '1150', '1149', '1140', '1139', '1138', '1146', '1144', '1145', '1142', '1133', '1134', '1135'],
+    'Selection': ['1002', '1074', '1080', '1093']
+};
+
+
+let grades = {
+    'Corporation': [0.17396997780769233, 0.041925016480769225, 0.13456268803846155, 0.11681922744230769],
+    'Special': [0.14931507475, 0.05527211325, 0.14216477582142859, 0.11558398792857141],
+    'II': [0.16751460301, 0.049599001860000005, 0.14550927477, 0.12087429321000003],
+    'I': [0.17467281421153846, 0.05616255738461539, 0.17163904415384618, 0.13415813857692307],
+    'III': [0.16046380630434784, 0.05097000629347827, 0.15188284420652176, 0.12110555226086958],
+    'NP': [0.16328398695000002, 0.04988474067, 0.16283619367, 0.12533497377],
+    'Selection': [0.16792330712499998, 0.053706116125, 0.1274046728125, 0.1163446986875]
 };

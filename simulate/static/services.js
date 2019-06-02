@@ -2,6 +2,8 @@
 let ids = ['pgr', 'ptax', 'wtax'];
 
 function draw(ctx, title, labels, d1, d2) {
+  //drawing the chart using the Chart.js function
+  // title - the title to be given to the chart, labels - the axis labels, d1 and d2 - the 2 datasets (city and average respectively)
   let myChart = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -56,7 +58,8 @@ function draw(ctx, title, labels, d1, d2) {
 
 function create() {
   // the graph and the form will be in the flexbox
-  let cont = document.getElementById('service-flex');
+  // this is the function to create the felxbos and the canvas for the graph
+  let cont = document.getElementById('service-flex'); //flexbox for the graphs with the services
   if (cont === null) {
     cont = document.createElement('div');
     // creating the container
@@ -67,18 +70,19 @@ function create() {
   if (h !== null) {
     h.remove();
   }
-  h = document.createElement('canvas');
+  h = document.createElement('canvas'); //the canvas for the graph
   // the canvas for the graph
   h.setAttribute('id', 'service-comp');
   cont.insertBefore(h, cont.firstChild);
   let serv = document.getElementById('services');
-  serv.insertBefore(cont, serv.firstChild);
+  serv.insertBefore(cont, serv.firstChild); //ensures that the flexbox is the first child withing the services div element
   return h;
 }
 
 function add_form(capt, labels, values, functions) {
-  //add the caption before the form
-  let caption = document.getElementById('caption3')
+  //add the caption before the form and before the buttons
+  // function to add the form and the captions
+  let caption = document.getElementById('caption3') //inserts the captions for the services
     if (caption !== null) {
       caption.remove()
     }
@@ -89,11 +93,11 @@ function add_form(capt, labels, values, functions) {
 
   console.log(values);
   // creating the forms to go alongside the graphs
-  let f = document.getElementById('service-selector');
+  let f = document.getElementById('service-selector'); //the range selector for the values associated with the services
   if (f !== null) {
     f.remove()
   }
-  f = document.createElement('div');
+  f = document.createElement('div'); //the div containing all the service selectors for the range inputs
   f.setAttribute('id', 'service-selector');
   for (let i = 0; i < values.length; i++) {
     let x = document.createElement('div');
@@ -123,7 +127,7 @@ function add_buttons(aspect) {
   // creating the buttons that further zoom in
   // aspect is time, acc, use or coll
   // the buttons will go in the div and not the flexbox
-  window.aspect = aspect;
+  window.aspect = aspect; //specfies the value for the next zoom, whether it be Timeliness, Accuracy, Right Collection, Use
   console.log("Adding buttons");
   let buttons = [];
   let functions = [];
@@ -133,9 +137,9 @@ function add_buttons(aspect) {
     console.log("Creating");
     r = document.createElement('div');
     r.className = 'btn-group';
-    r.setAttribute('id', 'serv-select');
+    r.setAttribute('id', 'serv-select'); //the id of the button group to further zoom into the services
     r.style.display = "block";
-    document.getElementById('services').appendChild(r);
+    document.getElementById('services').appendChild(r); //appending the buttons to the end of the div 
     buttons = ["PGR", "Property Tax", "Water Tax"];
     functions = [pgr_deep, prop_deep, water_deep];
 
@@ -156,7 +160,7 @@ function time () {
   let caption = "Figure showing comparison of " + title_text + " betwwen " + city.name + " and the average of ULBs with similar populations";
   let labels = [];
   let dataset1 = {}; //for the city
-  let dataset2 = {}; //for the grade
+  let dataset2 = {}; //for the bin
   dataset1.label = city.name;
   dataset2.label = average.name;
   dataset1.values = [];
@@ -223,7 +227,12 @@ function use() {
   functions = [use_pgr, use_ptax, use_wtax];
   form_values = dataset1.values;
   add_form(caption, form_labels, form_values, functions);
-  document.getElementById('serv-select').remove();
+
+  var but = document.getElementById('serv-select');
+  if (but !== null) {
+    document.getElementById('serv-select').remove(); //these are the buttons that allow for a further zoom - right use doesn't exist beyond the service level
+  }
+  
 }
 
 function coll() {

@@ -1,3 +1,25 @@
+var url_string = window.location.href;
+var url = new URL(url_string);
+var ulb = url.searchParams.get("name");
+var pop = parseFloat(url.searchParams.get("pop"));
+var speed = 5;
+
+var txt = `Government Efficiency and Privacy Simulation for ${ulb} (Population: ${pop})`;
+var i = 0;
+
+function typeWriter() {
+  if (i < txt.length) {
+    document.getElementById("label").innerHTML += txt.charAt(i);
+    i++;
+    setTimeout(typeWriter, speed);
+  }
+};
+
+window.onload = () => {
+    typeWriter();
+    load()
+};
+
 
 function load() {
     const error = document.getElementById('pop-error');
@@ -5,8 +27,6 @@ function load() {
         error.remove();
     }
 
-    let ulb = document.getElementById('ulb').value;
-    let pop = parseFloat(document.getElementById('pop').value);
     console.log(ulb);
     console.log(pop);
 
