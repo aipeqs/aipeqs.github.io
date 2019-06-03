@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+  <html>
+
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>PIEQS Simulation</title>
+        <link rel="stylesheet" href="simulate/static/css/front.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="center">
+            <div id="rcorners" class="container" style="background-color:gray">
+                <div class="row">
+                    <div class="column">
+                        <!-- Here goes the information about the website -->
+                        <div class="jumbotron" style="background-color: transparent">
+                            <h4 id="label"></h4>
+                            <div style="text-align: justify"> The Privacy, Innovation and e-Governance using Quantitative Systems (PIEQS) group within MIT CSAIL has deleveloped this simulator to predict the behavior of Indian cities with measured changes hypothetically applied. This behavior will be reflected in the government efficiency and citizen data privacy.</div>
+                        </div>
+                    </div>
+                    <div class="column-2"></div>
+                    <div class="column">
+                        <!-- <img src="../logo.png" alt="PIEQS Logo"> -->
+                        <br>
+                        <div class="jumbotron" style="background-color: transparent">
+                            <h3>Enter ULB Data</h3>
+                            <br>
+                            <input id="name" class="form-control" placeholder="Name">
+                            <br>
+                            <input id="population" class="form-control" placeholder="Population">
+                            <br>
+                            <button id="send" onclick="change()" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </body>
+    <script src="front.js"></script>
+
+  </html>
