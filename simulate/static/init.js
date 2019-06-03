@@ -114,6 +114,7 @@ class Grade {
     }
 
     calc_average() {
+        // calculate the average based on the individual components
         let time = 0;
         let acc = 0;
         let use = 0;
@@ -138,6 +139,8 @@ class Grade {
 }
 
 class Func {
+    //the index values for the functionaries within the departments or services
+    //approximated to the same value as the levels above (due to no data being available at this level)
     constructor(name, coll, gei) {
         // pass the values in an array
         this.name = name;
@@ -161,6 +164,7 @@ class Func {
     }
 
     //this is for changes made directly from the user interface
+    // the follow-through updates are made through the code in the interface
     change_time(new_time) {
         this.time = new_time;
     }
@@ -176,6 +180,7 @@ class Func {
 
 
 class Service {
+    // represents the 3 services in each ULB
     constructor(name, ipi, gei) {
         this.title = name;
         this.time = gei.Timeliness;
@@ -183,13 +188,13 @@ class Service {
         this.coll = ipi["Right Collection"];
         this.use = ipi["Right Use"];
         this.disc = ipi["Right Disclosure"];
-        if (name !== "PGR") {
+        if (name !== "PGR") { //only the PGR will have departments, the other 2 will lead directly to the functionaries
             this.departments = null;
             this.funcs = [];
             for (let key in ipi.Functionaries) {
                 this.funcs.push(new Func(key, ipi.Functionaries[key], gei));
             }
-        } else {
+        } else { 
             //set up the departments
             this.departments = [];
             for (let key in ipi.Departments) {
@@ -297,6 +302,7 @@ class Department {
         this.coll = coll;
         this.time = gei.Timeliness;
         this.acc = gei.Accuracy;
+        //the next level for PGR will be the complaints and not the functionaries
         this.funcs = [];
         for (let key in funcs) {
             this.funcs.push(new Func(key, funcs[key], gei));
@@ -369,27 +375,27 @@ class Department {
 
 }
 
+class Complaint {
+    //representing the different complaints within the PGR departments
+    constructor(name, dept, time, acc) {
+        this.title = name;
+        this.department = dept;
+        this.time = time;
+        this.acc = acc;
+    }
 
-//the accuracy data for the ULB's PGR information
+    calc_average() {
+        this.gei = this.time * this.acc;
+    }
 
-//dictionary to match the official department names and the variable objects
-// let department_match = {
-//   "Engineering" : engineering,
-//   "Administration" : admin,
-//   "Revenue" : rev,
-//   "UPA" : upa,
-//   "PHS" : phs,
-//   "Town Planning" : town_planning
-// }
-//
-// class Complaint {
-//   constructor (name, department) {
-//     this.service = "PGR";
-//     this.department = department;
-//     this.complaint = name;
-//     this.time = department_match.department.name;
-//   }
-// }
+    change_time(time) {
+        this.time = time;
+    }
+
+    change_acc(acc) {
+        this.acc = acc;
+    }
+}
 
 function generate (name, pop) {
 	const bin = findbin(pop);
