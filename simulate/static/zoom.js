@@ -81,13 +81,13 @@ function water_deep() {
 }
 
 
-// third zoom that goes from PGR departments to functionaries
+// third zoom that goes from PGR complaints to departments
 
 function assign_functions(){
   let pgr_functions = {
-  "time": pgr_ftime,
-  "acc" : pgr_facc,
-  "coll" : pgr_fcoll
+  "time": pgr_ctime,
+  "acc" : pgr_cacc,
+  "coll" : pgr_ccoll
   }
   return pgr_functions;
 }
@@ -95,41 +95,37 @@ function assign_functions(){
 function eng_deep() {
   let pgr_functions = assign_functions();
   window.department = "Engineering";
-  window.dindex = 0;
   pgr_functions[aspect]();
 }
 
 function phs_deep() {
   let pgr_functions = assign_functions();
   window.department = "PHS";
-  window.dindex = 1;
   pgr_functions[aspect]();
 }
 
 function tpl_deep() {
   let pgr_functions = assign_functions();
   window.department = "Town Planning";
-  window.dindex = 2;
   pgr_functions[aspect]();
 }
 
 function upa_deep() {
   let pgr_functions = assign_functions();
   window.department = "UPA";
-  window.dindex = 3;
   pgr_functions[aspect]();
 }
 
 function rev_deep() {
   let pgr_functions = assign_functions();
-  window.department = "Revenue Officer";
-  window.dindex = 4;
+  window.department = "Revenue";
   pgr_functions[aspect]();
 }
 
 function admin_deep() {
   let pgr_functions = assign_functions();
   window.department = "Administration";
-  window.dindex = 5;
   pgr_functions[aspect]();
 }
+
+//TODO: Insert a fourth zoom in order to go from PGR complaints to the functionaries

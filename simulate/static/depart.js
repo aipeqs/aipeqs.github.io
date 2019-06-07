@@ -1,158 +1,8 @@
 //departments for PGR to be graphed
 // the graphing and interaction with the services
-
-let ids2 = ['eng', 'phs', 'tpl', 'upa', 'admin', 'rev'];
-
-function draw_departments(ctx, title, labels, d1, d2) {
-  let myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: labels,
-          datasets: [{
-              label: d1.label,
-              data: d1.values,
-              backgroundColor: [
-                  'rgba(255, 102, 132, 0.2)',
-                  'rgba(255, 102, 132, 0.2)',
-                  'rgba(255, 102, 132, 0.2)',
-                  'rgba(255, 102, 132, 0.2)',
-                  'rgba(255, 102, 132, 0.2)',
-                  'rgba(255, 102, 132, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255, 102, 132, 1)',
-                  'rgba(255, 102, 132, 1)',
-                  'rgba(255, 102, 132, 1)',
-                  'rgba(255, 102, 132, 1)',
-                  'rgba(255, 102, 132, 1)',
-                  'rgba(255, 102, 132, 1)'
-              ],
-              borderWidth: 1
-          },
-          {
-              label: d2.label,
-              data: d2.values,
-              backgroundColor: [
-                  'rgba(75, 195, 192, 0.2)',
-                  'rgba(75, 195, 192, 0.2)',
-                  'rgba(75, 195, 192, 0.2)',
-                  'rgba(75, 195, 192, 0.2)',
-                  'rgba(75, 195, 192, 0.2)',
-                  'rgba(75, 195, 192, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(75, 195, 192, 1)',
-                  'rgba(75, 195, 192, 1)',
-                  'rgba(75, 195, 192, 1)',
-                  'rgba(75, 195, 192, 1)',
-                  'rgba(75, 195, 192, 1)',
-                  'rgba(75, 195, 192, 1)'
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          },
-          title : {
-            display: true,
-            text: title
-          }
-      }
-  });
-}
-
-function create_depart() {
-  // the graph and the form will be in the flexbox
-  let cont = document.getElementById('depart-flex');
-  if (cont === null) {
-    cont = document.createElement('div');
-    // creating the container
-    cont.className = 'flex-container';
-    cont.setAttribute('id', 'depart-flex');
-  }
-  let h = document.getElementById('depart-comp');
-  if (h !== null) {
-    h.remove();
-  }
-  h = document.createElement('canvas');
-  // the canvas for the graph
-  h.setAttribute('id', 'depart-comp');
-  cont.insertBefore(h, cont.firstChild);
-  let serv = document.getElementById('departments');
-  serv.insertBefore(cont, serv.firstChild);
-  return h;
-}
-
-function add_form_depart(labels, values, functions) {
-  console.log(values);
-  // creating the forms to go alongside the graphs - the range input forms - the sliders are here
-  let f = document.getElementById('depart-selector');
-  if (f !== null) {
-    f.remove()
-  }
-  f = document.createElement('div');
-  f.setAttribute('id', 'depart-selector');
-  for (let i = 0; i < values.length; i++) {
-    let x = document.createElement('div');
-    let g = document.createElement('input');
-    g.type = 'range';
-    g.setAttribute('id', ids2[i]);
-    g.name = ids[i];
-    g.min = "0.000000";
-    g.max = "1.000000";
-    g.step = "0.000001"; 
-    g.setAttribute('value', "" + values[i].toFixed(6));
-    g.addEventListener("change", functions[i]); //this function is to allow for the reflection of the change within the instance and the interface
-    x.appendChild(g);
-    let k = document.createElement('label');
-    k.setAttribute('for', ids[i]);
-    k.style.cssText = 'font-family:helvetica; font-size:10px'
-    k.innerHTML = labels[i];
-    x.appendChild(k);
-    f.appendChild(x);
-  }
-  document.getElementById('depart-flex').appendChild(f);
-}
-
-function add_buttons_depart(aspect) {
-  // creating the buttons that further zoom in
-  // aspect is time, acc, use or coll
-  // the buttons will go in the div and not the flexbox
-  window.aspect = aspect;
-  console.log("Adding buttons");
-  let buttons = [];
-  let functions = [];
-  let r = document.getElementById('depart-select');
-  console.log(r);
-  if (r === null) {
-    console.log("Creating");
-    r = document.createElement('div');
-    r.className = 'btn-group';
-    r.setAttribute('id', 'depart-select');
-    r.style.display = "block";
-    document.getElementById('departments').appendChild(r);
-    buttons = ['Engineering', 'PHS', 'Town Planning', 'UPA', 'Administration', 'Revenue'];
-    functions = [eng_deep, phs_deep, tpl_deep, upa_deep, admin_deep, rev_deep];
-
-    for (let i = 0; i < buttons.length; i++)
-    {
-        let g = document.createElement('button');
-        g.className = "btn btn-primary";
-        g.innerHTML = buttons[i];
-        g.addEventListener('click', functions[i]);
-        r.appendChild(g);
-    }
-  }
-}
-
 function pgr_depart_time () {
-  let ctx = create_depart();
+  let ctx = create('depart-flex', 'depart-comp', 'departments');
+  var caption = `Comparison between the timeliness of the departments to which complaints were filed between ${city.name} and the average of ULBs with populations of ${average.name}`;
   let title_text = 'Timeliness of PGR Departments';
   let labels = [];
   let dataset1 = {}; //for the city
@@ -161,22 +11,73 @@ function pgr_depart_time () {
   dataset2.label = average.name;
   dataset1.values = [];
   dataset2.values = [];
-  for (let i = 0; i < city.services[0].departments.length; i++) {
-    labels.push(city.services[0].departments[i].name);
+
+  //allowance needs to be made for the fact that all departments may not be represented in the ULB chosen at random, and so a proper comparison needs to be made
+  var form_labels = [];
+  var functions = [];
+  var ids = [];
+  var button_functions = [];
+
+  for (var key in city.services["PGR"].departments) {
+    labels.push(key);
     // list of datasets
-    dataset1.values.push(city.services[0].departments[i].time);
-    dataset2.values.push(average.services[0].departments[i].time);
+    dataset1.values.push(city.services["PGR"].departments[key].time);
+    dataset2.values.push(average.services["PGR"].departments[key].time);
+    form_labels.push(`${key} Timeliness`);
+
+    //to add the functions that will allow for the range input forms to alter their values
+    switch(key) {
+      case "Engineering":
+        functions.push(time_eng);
+        ids.push('eng'); //the ids for the range inputs
+        button_functions.push(eng_deep); //onclick functions for the deep_dive buttons
+        break;
+      case "PHS":
+        functions.push(time_phs);
+        ids.push('phs');
+        button_functions.push(phs_deep);
+        break;
+      case "Town Planning":
+        functions.push(time_tpl);
+        ids.push('tpl');
+        button_functions.push(tpl_deep);
+        break;
+      case "UPA":
+        functions.push(time_upa);
+        ids.push('upa');
+        button_functions.push(upa_deep);
+        break;
+      case "Administration":
+        functions.push(time_admin);
+        ids.push('admin');
+        button_functions.push(admin_deep);
+        break;
+      default:
+        functions.push(time_rev);
+        ids.push('rev');
+        button_functions.push(rev_deep)
+        break;
+    }
+
   }
-  draw_departments(ctx, title_text, labels, dataset1, dataset2);
-  form_labels = ["Engineering Timeliness", "PHS Timeliness", "Town Planning Timeliness", "UPA Timeliness", "Administration Timeliness", "Revenue Timeliness"];
-  functions = [time_eng, time_phs, time_tpl, time_upa, time_admin, time_rev];
+
+  // for (let i = 0; i < city.services[0].departments.length; i++) {
+  //   labels.push(city.services[0].departments[i].name);
+  //   // list of datasets
+  //   dataset1.values.push(city.services[0].departments[i].time);
+  //   dataset2.values.push(average.services[0].departments[i].time);
+  // }
+  draw(ctx, title_text, labels, dataset1, dataset2);
+  // form_labels = ["Engineering Timeliness", "PHS Timeliness", "Town Planning Timeliness", "UPA Timeliness", "Administration Timeliness", "Revenue Timeliness"];
+  // functions = [time_eng, time_phs, time_tpl, time_upa, time_admin, time_rev];
   form_values = dataset1.values;
-  add_form_depart(form_labels, form_values, functions); //these functions are those found in updates.js
-  add_buttons_depart('time');
+  add_form(caption, form_labels, form_values, functions, ids, 'caption4', 'depart-selector', 'depart-flex'); //these functions are those found in updates.js
+  add_buttons('time', labels, button_functions, 'depart-select', 'departments');
 }
 
 function pgr_depart_acc () {
-  let ctx = create_depart();
+  let ctx = create('depart-flex', 'depart-comp', 'departments');
+  var caption = `Comparison between the accuracy of the departments to which complaints were filed between ${city.name} and the average of ULBs with populations of ${average.name}`;
   let title_text = 'Accuracy of PGR Departments';
   let labels = [];
   let dataset1 = {}; //for the city
@@ -185,22 +86,64 @@ function pgr_depart_acc () {
   dataset2.label = average.name;
   dataset1.values = [];
   dataset2.values = [];
-  for (let i = 0; i < city.services[0].departments.length; i++) {
-    labels.push(city.services[0].departments[i].name);
+  //allowance needs to be made for the fact that all departments may not be represented in the ULB chosen at random, and so a proper comparison needs to be made
+  var form_labels = [];
+  var functions = [];
+  var ids = [];
+  var button_functions = [];
+
+  for (var key in city.services["PGR"].departments) {
+    labels.push(key);
     // list of datasets
-    dataset1.values.push(city.services[0].departments[i].acc);
-    dataset2.values.push(average.services[0].departments[i].acc);
+    dataset1.values.push(city.services["PGR"].departments[key].acc);
+    dataset2.values.push(average.services["PGR"].departments[key].acc);
+    form_labels.push(`${key} Accuracy`);
+
+    //to add the functions that will allow for the range input forms to alter their values
+    switch(key) {
+      case "Engineering":
+        functions.push(acc_eng);
+        ids.push('eng'); //the ids for the range inputs
+        button_functions.push(eng_deep); //onclick functions for the deep_dive buttons
+        break;
+      case "PHS":
+        functions.push(acc_phs);
+        ids.push('phs');
+        button_functions.push(phs_deep);
+        break;
+      case "Town Planning":
+        functions.push(acc_tpl);
+        ids.push('tpl');
+        button_functions.push(tpl_deep);
+        break;
+      case "UPA":
+        functions.push(acc_upa);
+        ids.push('upa');
+        button_functions.push(upa_deep);
+        break;
+      case "Administration":
+        functions.push(acc_admin);
+        ids.push('admin');
+        button_functions.push(admin_deep);
+        break;
+      default:
+        functions.push(acc_rev);
+        ids.push('rev');
+        button_functions.push(rev_deep)
+        break;
+    }
+
   }
-  draw_departments(ctx, title_text, labels, dataset1, dataset2);
-  form_labels = ["Engineering Accuracy", "PHS Accuracy", "Town Planning Accuracy", "UPA Accuracy", "Administration Accuracy", "Revenue Accuracy"];
-  functions = [acc_eng, acc_phs, acc_tpl, acc_upa, acc_admin, acc_rev];
+
+  draw(ctx, title_text, labels, dataset1, dataset2);
   form_values = dataset1.values;
-  add_form_depart(form_labels, form_values, functions);
-  add_buttons_depart('acc');
+  add_form(caption, form_labels, form_values, functions, ids, 'caption4', 'depart-selector', 'depart-flex'); //these functions are those found in updates.js
+  add_buttons('acc', labels, button_functions, 'depart-select', 'departments');
 }
 
 function pgr_depart_coll() {
-  let ctx = create_depart();
+  let ctx = create('depart-flex', 'depart-comp', 'departments');
+  var caption = `Comparison between the right collection of the departments to which complaints were filed between ${city.name} and the average of ULBs with populations of ${average.name}`;
   let title_text = 'Right Collection of PGR Departments';
   let labels = [];
   let dataset1 = {}; //for the city
@@ -209,16 +152,55 @@ function pgr_depart_coll() {
   dataset2.label = average.name;
   dataset1.values = [];
   dataset2.values = [];
-  for (let i = 0; i < city.services[0].departments.length; i++) {
-    labels.push(city.services[0].departments[i].name);
+
+  //allowance needs to be made for the fact that all departments may not be represented in the ULB chosen at random, and so a proper comparison needs to be made
+  var form_labels = [];
+  var functions = [];
+  for (var key in city.services["PGR"].departments) {
+    labels.push(key);
     // list of datasets
-    dataset1.values.push(city.services[0].departments[i].coll);
-    dataset2.values.push(average.services[0].departments[i].coll);
+    dataset1.values.push(city.services["PGR"].departments[key].coll);
+    dataset2.values.push(average.services["PGR"].departments[key].coll);
+    form_labels.push(`${key} Right Collection`);
+
+    //to add the functions that will allow for the range input forms to alter their values
+    switch(key) {
+      case "Engineering":
+        functions.push(coll_eng);
+        ids.push('eng'); //the ids for the range inputs
+        button_functions.push(eng_deep); //onclick functions for the deep_dive buttons
+        break;
+      case "PHS":
+        functions.push(coll_phs);
+        ids.push('phs');
+        button_functions.push(phs_deep);
+        break;
+      case "Town Planning":
+        functions.push(coll_tpl);
+        ids.push('tpl');
+        button_functions.push(tpl_deep);
+        break;
+      case "UPA":
+        functions.push(coll_upa);
+        ids.push('upa');
+        button_functions.push(upa_deep);
+        break;
+      case "Administration":
+        functions.push(coll_admin);
+        ids.push('admin');
+        button_functions.push(admin_deep);
+        break;
+      default:
+        functions.push(coll_rev);
+        ids.push('rev');
+        button_functions.push(rev_deep)
+        break;
+    }
+
   }
-  draw_departments(ctx, title_text, labels, dataset1, dataset2);
-  form_labels = ["Engineering Right Collection", "PHS Right Collection", "Town Planning Right Collection", "UPA Right Collection", "Administration Right Collection", "Revenue Right Collection"];
-  functions = [coll_eng, coll_phs, coll_tpl, coll_upa, coll_admin, coll_rev];
+
+  draw(ctx, title_text, labels, dataset1, dataset2);
   form_values = dataset1.values;
-  add_form_depart(form_labels, form_values, functions);
-  add_buttons_depart('coll');
+  add_form(caption, form_labels, form_values, functions, ids, 'caption4', 'depart-selector', 'depart-flex'); //these functions are those found in updates.js
+  add_buttons('coll', labels, button_functions, 'depart-select', 'departments');
 }

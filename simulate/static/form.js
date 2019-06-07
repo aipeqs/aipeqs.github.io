@@ -27,8 +27,6 @@ function load() {
         error.remove();
     }
 
-    console.log(ulb);
-    console.log(pop);
 
     if (pop < 25000) {
         const a = document.createElement('p');
@@ -41,7 +39,6 @@ function load() {
 
     let made = generate(ulb, pop);
     const average = made[0];
-    console.log(average.name);
     let city = made[1];
     
     window.city = city;

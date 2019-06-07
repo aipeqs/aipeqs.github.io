@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
 
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ulb = document.getElementById('ulb').value;
             const e = document.getElementById('grade');
             const grade = e.options[e.selectedIndex].value;
-            socket.emit('submit data', { 'ulb': ulb, 'grade': grade}); 
+            socket.emit('submit data', { 'ulb': ulb, 'grade': grade});
         }
 
     });

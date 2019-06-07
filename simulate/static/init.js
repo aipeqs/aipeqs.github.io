@@ -1,30 +1,54 @@
-//load the data analysis as soon as the page is run
-//function to find the city's tier
+const LAKH = 100000; //unit of measurement for the population of ULBs
 
-
-
-//the dictionary(object) below contains the approximated accuracies of the services and their components. This was extracted from the data
-// TODO:
-
-
-const LAKH = 100000;
+//gives objects the property length
+if (!Object.prototype.length) {
+  Object.defineProperty(Object.prototype, 'length', {
+    get: function(){
+      return Object.keys(this).length
+    }
+  });
+}
 
 function findbin(pop) {
-	if (0.25*LAKH <= pop && pop <= 0.5*LAKH){
-        return 1;
-	}
-    else if (0.5*LAKH < pop && pop <= 0.75*LAKH) {
-        return 2;
+    //function to find the bin in which the ULB in question belongs based on its size
+
+        if (0.25*LAKH <= pop && pop <= 0.5*LAKH) {
+            return 1;
+        } else {
+            if (0.5*LAKH < pop && pop <= 0.75*LAKH) {
+              return 2;
+            } else {
+              if (0.75*LAKH < pop && pop <= LAKH) {
+                return 3;
+              } else {
+                if (LAKH < pop && pop<= 2*LAKH) {
+                  return 4;
+                } else {
+                  return 5;
+                }
+              }
+            }
+        }
+}
+
+function abbreviate(word) {
+    var res = word.split(" ");
+    var final = "";
+    if (res.length === 1) {
+        return word;
     }
-    else if (0.75*LAKH < pop && pop <= LAKH) {
-        return 3;
+    for (var str of res) {
+        final = final + str.charAt(0).toUpperCase();
     }
-    else if (LAKH < pop && pop<= 2*LAKH) {
-        return 4;
-    }
-    else{
-        return 5;
-    }
+    return final;
+}
+
+
+//dictionary matching the service to its respective dictionary containing the GEI information for the separate bins
+let service_gei_ulb_match = {
+    "PGR": pgr_gei,
+    "Property Tax": prop_gei,
+    "Water Tax": water_gei
 }
 
 class ULB {
@@ -37,12 +61,17 @@ class ULB {
         this.grade = data.Grade;
         this.population = data.Population;
         this.bin = findbin(this.population);
-        this.time = gei_info.Timeliness;
-        this.acc = gei_info.Accuracy;
-        this.services = [];
+        this.time = 0;
+        this.acc = 0;
+        this.services = {};
         for (let key in services) {
             //create the services in the tier
-            this.services.push(new Service(key, services[key], gei_info[key]));
+            console.log("initialize");
+            console.log(key);
+            if (name in service_gei_ulb_match[key]){
+                this.services[key] = new Service(key, services[key], service_gei_ulb_match[key][name]);
+            }
+
         }
         this.calc_average();
     }
@@ -53,7 +82,8 @@ class ULB {
         let use = 0;
         let coll = 0;
         let disc = 0;
-        for (let f of this.services) {
+        for (var key in this.services) {
+            var f = this.services[key];
             time += f.time;
             acc += f.acc;
             use += f.use;
@@ -72,17 +102,7 @@ class ULB {
 
 
 }
-
-//indices that point to the following timeliness values in the bins dictionary
-let indices = {
-    "PGR": 0,
-    "Property Tax" : 1,
-    "Water Tax": 2
-};
-
 //the average timeliness for the PGR, property tax, water tax and the overall avergae in each ULB bin
-let bins = {1: [0.6581644103055556, 0.19514165166666667, 0.6161971922500001, 0.4898344180833334], 2: [0.6663472859411763, 0.19842400691176473, 0.5859213480588236, 0.48356421358823526], 3: [0.6471763774285714, 0.2226724242857143, 0.7323666677142857, 0.5340718231428571], 4: [0.6601050201875001, 0.22632661906249998, 0.652377637, 0.5129364253750001], 5: [0.6704651711764706, 0.18786100776470588, 0.5341360854117648, 0.4641540881764706]};
-
 let ulb_bins = {1: ['1155', '1156', '1157', '1158', '1120', '1124', '1164', '1165', '1161', '1162', '1160', '1151', '1152', '1153', '1148', '1147', '1150', '1149', '1062', '1065', '1140', '1139', '1072', '1146', '1144', '1145', '1076', '1078', '1142', '1082', '1083', '1133', '1134', '1137', '1092', '1135'], 2: ['1006', '1010', '1117', '1118', '1119', '1122', '1123', '1125', '1019', '1022', '1023', '1025', '1026', '1027', '1131', '1132', '1143', '1029', '1127', '1033', '1034', '1059', '1061', '1063', '1066', '1067', '1069', '1071', '1077', '1079', '1084', '1136', '1090', '1091'], 3: ['1005', '1011', '1121', '1018', '1030', '1032', '1081'], 4: ['1002', '1003', '1004', '1007', '1008', '1009', '1014', '1015', '1020', '1024', '1028', '1068', '1070', '1074', '1080', '1085'], 5: ['1001', '1154', '1012', '1013', '1016', '1017', '1163', '1021', '1031', '1035', '1060', '1064', '1138', '1073', '1075', '1086', '1093']};
 
 bin_strings = {
@@ -93,22 +113,27 @@ bin_strings = {
 	5: ">2 Lakh"
 }
 
+
+//dictionary matching the service to its respective dictionary containing the GEI information for the separate bins
+let service_gei_bins_match = {
+    "PGR": pgr_bins,
+    "Property Tax": prop_bins,
+    "Water Tax": water_bins
+}
 class Grade {
     //made up of services, all of which are the same for each tier
     //changed to make up the average of ULB values from the same one of the 5 population bins
     constructor(name) {
         this.name = bin_strings[name];
-        this.time = bins[name][3];
-        this.acc = 0.5;
-        this.services = [];
+        this.time = 0;
+        this.acc = 0;
+        this.services = {}; //a dictionary so that the service name can be matched to the service object easily
         for (let key in services) {
             //create the services in the tier
-            let gei = {
-                "Timeliness" : bins[name][indices[key]],
-                "Accuracy" : 1
-            };
+            if (name in service_gei_bins_match[key]){
+                this.services[key] = new Service(key, services[key], service_gei_bins_match[key][name]);
+            }
 
-            this.services.push(new Service(key, services[key], gei));
         }
         this.calc_average();
     }
@@ -120,7 +145,10 @@ class Grade {
         let use = 0;
         let coll = 0;
         let disc = 0;
-        for (let f of this.services) {
+        for (var key in this.services) {
+            var f = this.services[key];
+            console.log(f)
+            console.log(f.time);
             time += f.time;
             acc += f.acc;
             use += f.use;
@@ -128,6 +156,8 @@ class Grade {
             disc += f.disc;
         }
         let total = this.services.length;
+        console.log(total);
+        console.log(time);
         this.time = time / total;
         this.acc = acc / total;
         this.use = use / total;
@@ -149,17 +179,29 @@ class Func {
         this.coll = coll;
     }
 
-    //this is to carry through changes made at the upper levels
     change(attr, fraction) {
-        if (attr === 'time') {
-            this.time = this.time * (1+fraction);
-        } else {
-            if (attr === 'acc') {
+        //implements changes that were made by the user through the interface at higher levels
+        // if (attr === 'time') {
+        //     this.time = this.time * (1+fraction);
+        // } else {
+        //     if (attr === 'acc') {
+        //         this.acc = this.acc * (1+fraction);
+        //     }
+        //     else {
+        //         this.coll = this.coll * (1+fraction);
+        //     }
+        // }
+
+        switch(attr) {
+            case 'time':
+                this.time = this.time * (1+fraction);
+                break;
+            case 'acc':
                 this.acc = this.acc * (1+fraction);
-            }
-            else {
+                break;
+            default:
                 this.coll = this.coll * (1+fraction);
-            }
+                break;
         }
     }
 
@@ -183,25 +225,26 @@ class Service {
     // represents the 3 services in each ULB
     constructor(name, ipi, gei) {
         this.title = name;
-        this.time = gei.Timeliness;
-        this.acc = gei.Accuracy;
         this.coll = ipi["Right Collection"];
         this.use = ipi["Right Use"];
         this.disc = ipi["Right Disclosure"];
         if (name !== "PGR") { //only the PGR will have departments, the other 2 will lead directly to the functionaries
+            this.time = gei['ontime']/gei['count'];
+            this.acc = 1 - gei['reopened']/gei['count'];
             this.departments = null;
-            this.funcs = [];
+            this.funcs = {};
             for (let key in ipi.Functionaries) {
-                this.funcs.push(new Func(key, ipi.Functionaries[key], gei));
+                this.funcs[abbreviate(key)] = new Func(key, ipi.Functionaries[key], {"Timeliness": this.time, "Accuracy": this.acc});
             }
-        } else { 
+        } else {
             //set up the departments
-            this.departments = [];
-            for (let key in ipi.Departments) {
-                console.log(key);
-                this.departments.push(new Department(key, ipi.Departments[key], ipi.Functionaries, gei));
+            console.log(gei);
+            this.departments = {};
+            for (let key in gei) {
+                this.departments[key] = new Department(key, ipi.Departments[key], ipi.Functionaries, gei[key]);
             }
             //after creating all the departments, average the values over all the functionaries in each department
+            this.calc_average();
         }
     }
 
@@ -213,21 +256,22 @@ class Service {
         let total = 0;
         if (this.departments === null) {
             total = this.funcs.length;
-            for (let f of this.funcs) {
+            for (var key in this.funcs) {
+                var f = this.funcs[key];
                 time += f.time;
                 acc += f.acc;
                 coll += f.coll;
             }
         } else {
             total = this.departments.length;
-            for (let f of this.departments) {
+            for (var key in this.departments) {
+                var f = this.departments[key];
                 time += f.time;
                 acc += f.acc;
                 coll += f.coll;
             }
         }
 
-        console.log(time);
 
         this.time = time / total;
         this.acc = acc / total;
@@ -238,15 +282,15 @@ class Service {
 
     change_time(new_value) {
         let difference = new_value - this.time;
-	    let diff_fraction = difference / this.time;
+	    let diff_fraction = difference / this.time; //reducing all the values by the same fraction to maintain consistency
         this.time = new_value;
         if (this.departments === null) {
-            for (let i = 0; i < this.funcs.length; i++) {
-		        this.funcs[i].chang("time", diff_fraction);
+            for (var key in this.funcs) {
+		        this.funcs[key].change("time", diff_fraction);
             }
         } else {
-            for (let d of this.departments) {
-                d.change("time", diff_fraction);
+            for (key in this.departments) {
+                this.departments[key].change("time", diff_fraction);
             }
         }
 
@@ -257,12 +301,12 @@ class Service {
 	    let diff_fraction = difference / this.acc;
         this.acc = new_value;
         if (this.departments === null) {
-            for (let i = 0; i < this.funcs.length; i++) {
-		    this.funcs[i].change("acc", diff_fraction);
+            for (var key in this.funcs) {
+		    this.funcs[key].change("acc", diff_fraction);
             }
         } else {
-            for (let d of this.departments) {
-                d.change("acc",diff_fraction);
+            for (key in this.departments) {
+                this.departments[key].change("acc",diff_fraction);
             }
         }
 
@@ -278,12 +322,12 @@ class Service {
         let diff_fraction = difference / this.coll;
         this.coll = new_value;
         if (this.departments === null) {
-            for (let i = 0; i < this.funcs.length; i++) {
-                this.funcs[i].change("coll", diff_fraction); //changes the overall averages accordingly
+            for (var key in this.funcs) {
+                this.funcs[key].change("coll", diff_fraction); //changes the overall averages accordingly
             }
         } else {
-            for (let d of this.departments) {
-                d.change("coll", diff_fraction);
+            for (key in this.departments) {
+                this.departments[key].change("coll", diff_fraction);
             }
         }
     }
@@ -300,26 +344,32 @@ class Department {
     constructor(name, coll, funcs, gei) {
         this.name = name;
         this.coll = coll;
-        this.time = gei.Timeliness;
-        this.acc = gei.Accuracy;
+        this.time = 0;
+        this.acc = 0;
         //the next level for PGR will be the complaints and not the functionaries
-        this.funcs = [];
-        for (let key in funcs) {
-            this.funcs.push(new Func(key, funcs[key], gei));
+        // console.log("Passed to Department")
+        // console.log(coll);
+        // console.log(funcs);
+        // console.log(gei);
+        this.complaints = {};
+        for (let key in gei) {
+            this.complaints[key] = new Complaint(key, name, gei[key], funcs, coll);
         }
+        this.calc_average();
     }
 
     //leads down from services reduction
     change(attr, fraction) {
-        if (attr === 'time') {
-            this.time = this.time * (1 + fraction);
-        } else {
-            if (attr === 'acc') {
-                this.acc = this.acc * (1 + fraction);
-            }
-            else {
-                this.coll = this.coll * (1 + fraction);
-            }
+        switch(attr) {
+            case 'time':
+                this.time = this.time * (1+fraction);
+                break;
+            case 'acc':
+                this.acc = this.acc * (1+fraction);
+                break;
+            default:
+                this.coll = this.coll * (1+fraction);
+                break;
         }
     }
 
@@ -327,8 +377,8 @@ class Department {
         let difference = new_value - this.time; // if positive, an increase and negative a decrease so the best bet is just to add them
         let diff_fraction = difference / this.time;
         this.time = new_value;
-        for (let i = 0; i < this.funcs.length; i++) {
-            this.funcs[i].change("time", diff_fraction); //changes the overall averages accordingly
+        for (var key in this.complaints) {
+            this.complaints[key].change("time", diff_fraction); //changes the overall averages accordingly
         }
     }
 
@@ -336,8 +386,8 @@ class Department {
         let difference = new_value - this.acc;
         let diff_fraction = difference / this.acc;
         this.acc = new_value;
-        for (let i = 0; i < this.funcs.length; i++) {
-            this.funcs[i].change("acc", diff_fraction); //changes the overall averages accordingly
+        for (var key in this.complaints) {
+            this.complaints[key].change("acc", diff_fraction); //changes the overall averages accordingly
         }
     }
 
@@ -346,8 +396,8 @@ class Department {
         let difference = new_value - this.coll;
         this.coll = new_value;
         let diff_fraction = difference / this.coll;
-        for (let i = 0; i < this.funcs.length; i++) {
-            this.funcs[i].change("coll", diff_fraction); //changes the overall averages accordingly
+        for (var key in this.complaints) {
+            this.complaints[key].change("coll", diff_fraction); //changes the overall averages accordingly
         }
     }
 
@@ -355,70 +405,114 @@ class Department {
     calc_average() {
         let time = 0;
         let acc = 0;
-        let use = 0;
         let coll = 0;
-        let disc = 0;
-        for (let f of this.funcs) {
+        for (var key in this.complaints) {
+            var f = this.complaints[key];
             time += f.time;
             acc += f.acc;
-            use += f.use;
             coll += f.coll;
-            disc += f.disc;
         }
-        let total = this.funcs.length;
+        let total = this.complaints.length;
         this.time = time / total;
         this.acc = acc / total;
-        this.use = use / total;
         this.coll = coll / total;
-        this.disc = disc / total;
     }
 
 }
 
 class Complaint {
     //representing the different complaints within the PGR departments
-    constructor(name, dept, time, acc) {
+    constructor(name, dept, gei, funcs, coll) {
         this.title = name;
         this.department = dept;
-        this.time = time;
-        this.acc = acc;
+        this.time = gei['ontime']/gei['count'];
+        this.acc = 1 - gei['reopened']/gei['count'];
+        this.coll = coll;
+        this.funcs = {};
+        for (let key in funcs) {
+            this.funcs[abbreviate(key)] = new Func(key, funcs[key], {"Timeliness": this.time, "Accuracy": this.acc});
+        }
     }
 
     calc_average() {
-        this.gei = this.time * this.acc;
+        let time = 0;
+        let acc = 0;
+        let coll = 0;
+        for (var key in this.funcs) {
+            var f = this.funcs[key];
+            time += f.time;
+            acc += f.acc;
+            coll += f.coll;
+        }
+        let total = this.funcs.length;
+        this.time = time / total;
+        this.acc = acc / total;
+        this.coll = coll / total;
     }
 
-    change_time(time) {
-        this.time = time;
+    change(attr, fraction) {
+        switch(attr) {
+            case 'time':
+                this.time = this.time * (1+fraction);
+                break;
+            case 'acc':
+                this.acc = this.acc * (1+fraction);
+                break;
+            default:
+                this.coll = this.coll * (1+fraction);
+                break;
+        }
     }
 
-    change_acc(acc) {
-        this.acc = acc;
+    change_time(new_value) {
+        let difference = new_value - this.time; // if positive, an increase and negative a decrease so the best bet is just to add them
+        let diff_fraction = difference / this.time;
+        this.time = new_value;
+        for (var key in this.funcs) {
+            this.funcs[key].change("time", diff_fraction); //changes the overall averages accordingly
+        }
+    }
+
+    change_acc(new_value) {
+        let difference = new_value - this.acc;
+        let diff_fraction = difference / this.acc;
+        this.acc = new_value;
+        for (var key in this.funcs) {
+            this.funcs[key].change("acc", diff_fraction); //changes the overall averages accordingly
+        }
+    }
+
+
+    change_coll(new_value) {
+        let difference = new_value - this.coll;
+        this.coll = new_value;
+        let diff_fraction = difference / this.coll;
+        for (var key in this.funcs) {
+            this.funcs[key].change("coll", diff_fraction); //changes the overall averages accordingly
+        }
     }
 }
 
 function generate (name, pop) {
 	const bin = findbin(pop);
-	console.log(bin);
-    let averages = new Grade(bin); //for comparisons - the average values of all Andhra Pradesh ULBs with similar populations
-    //now to generate the random data points for the ULB to be simulated
-    items = ulb_bins[bin];
-    var item = items[Math.floor(Math.random() * items.length)]; //creates a model of the ULB from one that already exists within its population bracket
-    let current = new ULB(item, ulbs[item], gei_info[item]);
-    current.name = name; //this is the ULB that has just been modelled after the one entered - change the name to match the one being simulated
-    console.log(averages);
-    console.log(current);
+  console.log(bin);
+  let averages = new Grade(bin); //for comparisons - the average values of all Andhra Pradesh ULBs with similar populations
+  //now to generate the random data points for the ULB to be simulated
+  items = ulb_bins[bin];
+  var item = items[Math.floor(Math.random() * items.length)]; //creates a model of the ULB from one that already exists within its population bracket
+  let current = new ULB(item, ulbs[item], gei_info[item]);
+  current.name = name; //this is the ULB that has just been modelled after the one entered - change the name to match the one being simulated
 
-    let comparisons = [];
+  let comparisons = [];
 
-    // to create the comparison points for all the other bins
-    for (let i = 1; i < 6; i++) {
-    	if (i !== bin) {
-    		comparisons.push(new Grade(i));
-    	}
-    }
-    window.comparisons = comparisons;
-   
+  // to create the comparison points for all the other bins
+  for (let i = 1; i < 6; i++) {
+  	if (i !== bin) {
+  		comparisons.push(new Grade(i));
+  	}
+  }
+  window.comparisons = comparisons;
 
-    return [averages, current];
+
+  return [averages, current];
 }
