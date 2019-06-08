@@ -89,6 +89,7 @@ function acc() {
   }
 
   draw(ctx, title_text, labels, dataset1, dataset2);
+  form_values =  dataset1.values;
   add_form(caption, form_labels, form_values, functions, ids, 'caption3', 'service-selector', 'service-flex');
   add_buttons('acc', labels, button_functions, 'serv-select', 'services');
 }

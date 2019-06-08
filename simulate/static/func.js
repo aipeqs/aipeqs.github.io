@@ -155,10 +155,10 @@ function ptax_ftime () {
   var ids = []; //the ids of the individual forms
 
   for (var key in city.services["Property Tax"].funcs) {
-    labels.push(city.services["Property Tax"].funcs.key.name);
-    form_labels.push(`${city.services["Property Tax"].funcs.key.name} Timeliness`);
-    dataset1.values.push(city.services["Property Tax"].funcs.key.time);
-    dataset2.values.push(average.services["Property Tax"].funcs.key.time);
+    labels.push(city.services["Property Tax"].funcs[key].name);
+    form_labels.push(`${city.services["Property Tax"].funcs[key].name} Timeliness`);
+    dataset1.values.push(city.services["Property Tax"].funcs[key].time);
+    dataset2.values.push(average.services["Property Tax"].funcs[key].time);
 
     switch(key) {
       case 'MCO':
@@ -204,11 +204,11 @@ function ptax_facc () {
   var ids = []; //the ids of the individual forms
 
   for (var key in city.services["Property Tax"].funcs) {
-    labels.push(city.services["Property Tax"].funcs.key.name);
+    labels.push(city.services["Property Tax"].funcs[key].name);
 
-    form_labels.push(`${city.services["Property Tax"].funcs.key.name} Accuracy`);
-    dataset1.values.push(city.services["Property Tax"].funcs.key.acc);
-    dataset2.values.push(average.services["Property Tax"].funcs.key.acc);
+    form_labels.push(`${city.services["Property Tax"].funcs[key].name} Accuracy`);
+    dataset1.values.push(city.services["Property Tax"].funcs[key].acc);
+    dataset2.values.push(average.services["Property Tax"].funcs[key].acc);
 
     switch(key) {
       case 'MCO':
@@ -255,11 +255,11 @@ function ptax_fcoll () {
 
 
   for (var key in city.services["Property Tax"].funcs) {
-    labels.push(city.services["Property Tax"].funcs.key.name);
+    labels.push(city.services["Property Tax"].funcs[key].name);
 
-    form_labels.push(`${city.services["Property Tax"].funcs.key.name} Right Collection`);
-    dataset1.values.push(city.services["Property Tax"].funcs.key.coll);
-    dataset2.values.push(average.services["Property Tax"].funcs.key.coll);
+    form_labels.push(`${city.services["Property Tax"].funcs[key].name} Right Collection`);
+    dataset1.values.push(city.services["Property Tax"].funcs[key].coll);
+    dataset2.values.push(average.services["Property Tax"].funcs[key].coll);
 
     switch(key) {
       case 'MCO':
@@ -309,10 +309,10 @@ function wtax_ftime () {
   var ids = []; //the ids of the individual forms
 
   for (var key in city.services["Water Tax"].funcs) {
-    labels.push(city.services["Water Tax"].funcs.key.name);
-    form_labels.push(`${city.services["Water Tax"].funcs.key.name} Timeliness`);
-    dataset1.values.push(city.services["Water Tax"].funcs.key.time);
-    dataset2.values.push(average.services["Water Tax"].funcs.key.time);
+    labels.push(city.services["Water Tax"].funcs[key].name);
+    form_labels.push(`${city.services["Water Tax"].funcs[key].name} Timeliness`);
+    dataset1.values.push(city.services["Water Tax"].funcs[key].time);
+    dataset2.values.push(average.services["Water Tax"].funcs[key].time);
 
     switch(key) {
       case 'MCO':
@@ -355,10 +355,10 @@ function wtax_facc () {
   var ids = []; //the ids of the individual forms
 
   for (var key in city.services["Water Tax"].funcs) {
-    labels.push(city.services["Water Tax"].funcs.key.name);
-    form_labels.push(`${city.services["Water Tax"].funcs.key.name} Accuracy`);
-    dataset1.values.push(city.services["Water Tax"].funcs.key.acc);
-    dataset2.values.push(average.services["Water Tax"].funcs.key.acc);
+    labels.push(city.services["Water Tax"].funcs[key].name);
+    form_labels.push(`${city.services["Water Tax"].funcs[key].name} Accuracy`);
+    dataset1.values.push(city.services["Water Tax"].funcs[key].acc);
+    dataset2.values.push(average.services["Water Tax"].funcs[key].acc);
 
     switch(key) {
       case 'MCO':
@@ -401,10 +401,10 @@ function wtax_fcoll () {
   var ids = []; //the ids of the individual forms
 
   for (var key in city.services["Water Tax"].funcs) {
-    labels.push(city.services["Water Tax"].funcs.key.name);
-    form_labels.push(`${city.services["Water Tax"].funcs.key.name} Right Collection`);
-    dataset1.values.push(city.services["Water Tax"].funcs.key.coll);
-    dataset2.values.push(average.services["Water Tax"].funcs.key.coll);
+    labels.push(city.services["Water Tax"].funcs[key].name);
+    form_labels.push(`${city.services["Water Tax"].funcs[key].name} Right Collection`);
+    dataset1.values.push(city.services["Water Tax"].funcs[key].coll);
+    dataset2.values.push(average.services["Water Tax"].funcs[key].coll);
 
     switch(key) {
       case 'MCO':

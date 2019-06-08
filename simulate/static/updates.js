@@ -149,15 +149,15 @@ function department_change(value, new_value, department) {
 
   switch(value) {
     case "time":
-      city.services["PGR"].departments.department.change_time(new_value);
+      city.services["PGR"].departments[department].change_time(new_value);
       complaint_updates(pgr_depart_time, time);
       break;
     case "acc":
-      city.services["PGR"].departments.department.change_acc(new_value);
+      city.services["PGR"].departments[department].change_acc(new_value);
       complaint_updates(pgr_depart_acc, acc);
       break;
     default:
-      city.services["PGR"].departments.department.change_coll(new_value);
+      city.services["PGR"].departments[department].change_coll(new_value);
       complaint_updates(pgr_depart_coll, coll);
       break;
   }

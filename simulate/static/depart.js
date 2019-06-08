@@ -1,5 +1,10 @@
 //departments for PGR to be graphed
 // the graphing and interaction with the services
+//
+function remove_funcs() {
+  var fun = document.
+}
+
 function pgr_depart_time () {
   let ctx = create('depart-flex', 'depart-comp', 'departments');
   var caption = `Comparison between the timeliness of the departments to which complaints were filed between ${city.name} and the average of ULBs with populations of ${average.name}`;
