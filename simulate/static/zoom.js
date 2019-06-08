@@ -42,12 +42,23 @@ function zoom1 (index) {
 // second zoom that goes from the services to departments / functionaries
 function pgr_deep() {
   // draw the PGR departments of the window aspect
-  let functions = {
-    "time" : pgr_depart_time,
-    "acc" : pgr_depart_acc,
-    "coll" : pgr_depart_coll
+  // The windoe aspect indicates the attribute of the service to be displayed: timeliness, accuracy or right collection
+  var find = document.getElementById('functionaries');
+  if (find != null) {
+    find.innerHTML = ' ';
   }
-  functions[aspect]();
+
+  switch(aspect) {
+    case "time":
+      pgr_depart_time();
+      break;
+    case "acc":
+      pgr_depart_acc();
+      break;
+    default:
+      pgr_depart_coll();
+      break;
+  }
 }
 
 function prop_deep() {
@@ -57,12 +68,18 @@ function prop_deep() {
   if (find !== null) {
     find.innerHTML = ' ';
   }
-  let functions = {
-    "time" : ptax_ftime,
-    "acc" : ptax_facc,
-    "coll" : ptax_fcoll
+
+  switch(aspect) {
+    case "time":
+      ptax_ftime();
+      break;
+    case "acc":
+      ptax_facc();
+      break;
+    default:
+      ptax_fcoll();
+      break;
   }
-  functions[aspect]();
 }
 
 function water_deep() {
@@ -72,12 +89,18 @@ function water_deep() {
   if (find !== null) {
     find.innerHTML = ' ';
   }
-  let functions = {
-    "time" : wtax_ftime,
-    "acc" : wtax_facc,
-    "coll" : wtax_fcoll
+
+  switch(aspect) {
+    case "time":
+      wtax_ftime();
+      break;
+    case "acc":
+      wtax_facc();
+      break;
+    default:
+      wtax_fcoll();
+      break;
   }
-  functions[aspect]();
 }
 
 
