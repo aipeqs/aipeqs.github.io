@@ -8,7 +8,7 @@ function tax_updates(funct) {
   city.calc_average();
   funct();
   graph_indices();
-  if (index == 'gei') {
+  if (index === 'gei') {
     geifactors();
   } else {
     ipifactors();
@@ -133,7 +133,7 @@ function complaint_updates(func1, func2) {
   func2(); //redraws the services chart
   graph_indices(); //redraws the scatter chart with IPI against GEI
   // redraws the chart showing the index factors plotted against each other
-  if (index == 'gei') {
+  if (index === 'gei') {
     geifactors();
   } else {
     ipifactors();
@@ -265,14 +265,14 @@ function coll_rev() {
 // updates for Property tax functionaries
 //the property tax functionary names are:
 
-function time_update(serv, id, index, func1, func2) {
+function time_update(serv, id, ind, func1, func2) {
   // the serv is the key for the services directory for the city
   // the id is that of the HTML element
-  // index is the identifier for the functionary within the dictionary contained by the service
+  // ind is the identifier for the functionary within the dictionary contained by the service
   // func1 is the function that redraws the chart showing the functionary attributes
   // func2 redraws the chart for the services
   let new_time = parseFloat(document.getElementById(id).value);
-  city.services[serv].funcs[index].change_time(new_time);
+  city.services[serv].funcs[ind].change_time(new_time);
   city.services[serv].calc_average();
   city.calc_average();
   // redrawing the graph with values in question
@@ -281,7 +281,7 @@ function time_update(serv, id, index, func1, func2) {
   func2();
   // redrawing the indices graph
   graph_indices();
-  if (index == 'gei') {
+  if (index === 'gei') {
     geifactors();
   } else {
     ipifactors();
@@ -308,9 +308,9 @@ function time_pcomm(){
   time_update("Property Tax", 'comm', 'Commissioner', ptax_ftime, time);
 }
 
-function acc_update(serv, id, index, func1, func2) {
+function acc_update(serv, id, ind, func1, func2) {
   let new_acc = parseFloat(document.getElementById(id).value);
-  city.services[serv].funcs[index].change_acc(new_acc);
+  city.services[serv].funcs[ind].change_acc(new_acc);
   city.services[serv].calc_average();
   city.calc_average();
   // redrawing the graph with values in question
@@ -319,7 +319,7 @@ function acc_update(serv, id, index, func1, func2) {
   func2();
   // redrawing the indices graph
   graph_indices();
-  if (index == 'gei') {
+  if (index === 'gei') {
     geifactors();
   } else {
     ipifactors();
@@ -346,9 +346,9 @@ function acc_pcomm(){
 }
 
 
-function coll_update(serv, id, index, func1, func2) {
+function coll_update(serv, id, ind, func1, func2) {
   let new_coll = parseFloat(document.getElementById(id).value);
-  city.services[serv].funcs[index].change_coll(new_coll);
+  city.services[serv].funcs[ind].change_coll(new_coll);
   city.services[serv].calc_average();
   city.calc_average();
   // redrawing the graph with values in question
@@ -357,7 +357,7 @@ function coll_update(serv, id, index, func1, func2) {
   func2();
   // redrawing the indices graph
   graph_indices();
-  if (index == 'gei') {
+  if (index === 'gei') {
     geifactors();
   } else {
     ipifactors();
@@ -440,97 +440,99 @@ function coll_wcomms(){
 // remember to include the dindex variable
 
 
-function dep_time_update(id, index) {
-  let new_time = parseFloat(document.getElementById(id).value);
-  city.services[0].departments[dindex].funcs[index].change_time(new_time);
-  city.services[0].departments[dindex].calc_average();
-  city.services[0].calc_average();
-  city.calc_average();
-  // redrawing the graph with values in question
-  ptax_ftime();
-  // redrawing the services graph
-  time();
-  // redrawing the indices graph
-  graph_indices();
-  if (index == 'gei') {
-    geifactors();
-  } else {
-    ipifactors();
-  }
-}
-function dep_acc_update(id, index) {
-  let new_acc = parseFloat(document.getElementById(id).value);
-  city.services[0].departments[dindex].funcs[index].change_acc(new_acc);
-  city.services[0].departments[dindex].calc_average();
-  city.services[0].calc_average();
-  city.calc_average();
-  // redrawing the graph with values in question
-  ptax_ftime();
-  // redrawing the services graph
-  time();
-  // redrawing the indices graph
-  graph_indices();
-  if (index == 'gei') {
-    geifactors();
-  } else {
-    ipifactors();
-  }
-}
-function dep_coll_update(id, index) {
-  let new_coll = parseFloat(document.getElementById(id).value);
-  city.services[0].departments[dindex].funcs[index].change_coll(new_coll);
-  city.services[0].departments[dindex].calc_average();
-  city.services[0].calc_average();
-  city.calc_average();
-  // redrawing the graph with values in question
-  ptax_ftime();
-  // redrawing the services graph
-  time();
-  // redrawing the indices graph
-  graph_indices();
-  if (index == 'gei') {
-    geifactors();
-  } else {
-    ipifactors();
-  }
-}
+//function dep_time_update(id, index) {
+//  let new_time = parseFloat(document.getElementById(id).value);
+//  city.services[0].departments[dindex].funcs[index].change_time(new_time);
+//  city.services[0].departments[dindex].calc_average();
+//  city.services[0].calc_average();
+//  city.calc_average();
+//  // redrawing the graph with values in question
+//  ptax_ftime();
+//  // redrawing the services graph
+//  time();
+//  // redrawing the indices graph
+//  graph_indices();
+//  if (index === 'gei') {
+//    geifactors();
+//  } else {
+//    ipifactors();
+//  }
+//}
+//function dep_acc_update(id, index) {
+//  let new_acc = parseFloat(document.getElementById(id).value);
+//  city.services[0].departments[dindex].funcs[index].change_acc(new_acc);
+//  city.services[0].departments[dindex].calc_average();
+//  city.services[0].calc_average();
+//  city.calc_average();
+//  // redrawing the graph with values in question
+//  ptax_ftime();
+//  // redrawing the services graph
+//  time();
+//  // redrawing the indices graph
+//  graph_indices();
+//  if (index == 'gei') {
+//    geifactors();
+//  } else {
+//    ipifactors();
+//  }
+//}
 
-function time_cit(){
-  dep_time_update('cit', 0);
-}
-function time_hdo(){
-  dep_time_update('hdo', 1);
-}
-function time_go(){
-  dep_time_update('go', 2);
-}
-function time_fle(){
-  dep_time_update('fle', 3);
-}
-
-
-function acc_cit(){
-  dep_acc_update('cit', 0);
-}
-function acc_hdo(){
-  dep_acc_update('hdo', 1);
-}
-function acc_go(){
-  dep_acc_update('go', 2);
-}
-function acc_fle(){
-  dep_acc_update('fle', 3);
-}
-
-function coll_cit(){
-  dep_coll_update('cit', 0);
-}
-function coll_hdo(){
-  dep_coll_update('hdo', 1);
-}
-function coll_go(){
-  dep_coll_update('go', 2);
-}
-function coll_fle(){
-  dep_coll_update('fle', 3);
-}
+//the following functions are not being used
+//function dep_coll_update(id, index) {
+//  let new_coll = parseFloat(document.getElementById(id).value);
+//  city.services[0].departments[dindex].funcs[index].change_coll(new_coll);
+//  city.services[0].departments[dindex].calc_average();
+//  city.services[0].calc_average();
+//  city.calc_average();
+//  // redrawing the graph with values in question
+//  ptax_ftime();
+//  // redrawing the services graph
+//  time();
+//  // redrawing the indices graph
+//  graph_indices();
+//  if (index === 'gei') {
+//    geifactors();
+//  } else {
+//    ipifactors();
+//  }
+//}
+//
+//function time_cit(){
+//  dep_time_update('cit', 0);
+//}
+//function time_hdo(){
+//  dep_time_update('hdo', 1);
+//}
+//function time_go(){
+//  dep_time_update('go', 2);
+//}
+//function time_fle(){
+//  dep_time_update('fle', 3);
+//}
+//
+//
+//function acc_cit(){
+//  dep_acc_update('cit', 0);
+//}
+//function acc_hdo(){
+//  dep_acc_update('hdo', 1);
+//}
+//function acc_go(){
+//  dep_acc_update('go', 2);
+//}
+//function acc_fle(){
+//  dep_acc_update('fle', 3);
+//}
+//
+//function coll_cit(){
+//  dep_coll_update('cit', 0);
+//}
+//function coll_hdo(){
+//  dep_coll_update('hdo', 1);
+//}
+//function coll_go(){
+//  dep_coll_update('go', 2);
+//}
+//function coll_fle(){
+//  dep_coll_update('fle', 3);
+//}

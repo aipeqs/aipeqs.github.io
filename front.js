@@ -16,8 +16,11 @@ window.onload = () => {
 	typeWriter();
 };
 
+
 function change() {
 	let ulb = document.getElementById('name').value;
     let pop = parseFloat(document.getElementById('population').value);
     window.location.href = `simulate/templates/index.html?name=${ulb}&pop=${pop}`;
+    return false;
 }
+
